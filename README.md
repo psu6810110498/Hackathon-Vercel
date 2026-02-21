@@ -125,19 +125,57 @@ Thai learners preparing for HSK exams (Hanyu Shuiping Kaoshi — 汉语水平考
 
 ## 🛠️ Tech Stack
 
-| Layer                | Technology               | Purpose                                     |
-| -------------------- | ------------------------ | ------------------------------------------- |
-| **Framework**        | Next.js 14 (App Router)  | Server Components + Server Actions          |
-| **Language**         | TypeScript (Strict)      | Full type safety across the stack           |
-| **Styling**          | Tailwind CSS + shadcn/ui | Responsive, accessible UI components        |
-| **Authentication**   | NextAuth.js v5           | Google OAuth + Credentials (Email/Password) |
-| **Database**         | Supabase (PostgreSQL)    | Managed database with connection pooling    |
-| **ORM**              | Prisma 5                 | Type-safe database queries + migrations     |
-| **AI — Linguistic**  | DeepSeek API             | Grammar parsing & error detection           |
-| **AI — Pedagogical** | Claude 3.5 Sonnet        | Thai explanations & scoring                 |
-| **Vocabulary**       | HSK 3.0 (2021/2025)      | 11,092 words across 7-9 levels              |
-| **SRS Engine**       | ts-fsrs                  | Spaced repetition algorithm                 |
-| **Deployment**       | Vercel                   | Edge-optimized hosting                      |
+### 🖥️ Frontend
+
+| Technology                  | Purpose                                             |
+| --------------------------- | --------------------------------------------------- |
+| **Next.js 14** (App Router) | Framework หลัก — Server Components + Server Actions |
+| **React 18**                | UI Library — component-based rendering              |
+| **TypeScript 5.6** (strict) | Type safety ทั้ง frontend + backend                 |
+| **Tailwind CSS 3.4**        | Styling — utility-first CSS framework               |
+| **shadcn/ui**               | Reusable UI components (Button, Card, Dialog, etc.) |
+| **Lucide React**            | Modern icon library                                 |
+| **Sarabun** (Google Fonts)  | Thai typography                                     |
+
+### 🔧 Backend Logic
+
+| Technology             | Purpose                                                  |
+| ---------------------- | -------------------------------------------------------- |
+| **Next.js API Routes** | REST API (`/api/essay`, `/api/reading`, `/api/exercise`) |
+| **Server Actions**     | Server-side form handling (register, login, signOut)     |
+| **NextAuth.js v5**     | Authentication — Google OAuth + Email/Password           |
+| **bcryptjs**           | Secure password hashing                                  |
+| **Zod**                | Runtime schema validation for form inputs                |
+
+### 🗄️ Database
+
+| Technology                | Purpose                                                |
+| ------------------------- | ------------------------------------------------------ |
+| **Supabase** (PostgreSQL) | Managed cloud database with connection pooling         |
+| **Prisma 5**              | Type-safe ORM — queries, migrations, schema management |
+
+### 🤖 AI Pipeline (Dual-Model)
+
+| Technology                        | Purpose                                                          |
+| --------------------------------- | ---------------------------------------------------------------- |
+| **Claude 3.5 Sonnet** (Anthropic) | Pedagogical Layer — 4D scoring, Thai explanations, AI rewrite    |
+| **DeepSeek API**                  | Linguistic Layer — Grammar parsing, word choice, error detection |
+| **Demo Mode**                     | Mock data fallback when API credits are unavailable              |
+
+### 📚 Data & Algorithm
+
+| Technology              | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| **HSK 3.0** (2021/2025) | Vocabulary database — 11,092 words across 7-9 levels (JSON) |
+| **ts-fsrs**             | Spaced Repetition System algorithm for flashcards           |
+| **pinyin**              | Chinese character → Pinyin romanization converter           |
+
+### 🚀 Deployment
+
+| Technology                  | Purpose                                                             |
+| --------------------------- | ------------------------------------------------------------------- |
+| **Vercel**                  | Production hosting with edge optimization + auto-deploy from GitHub |
+| **Cloudflare Quick Tunnel** | Local demo tunnel for hackathon presentation                        |
 
 ---
 
