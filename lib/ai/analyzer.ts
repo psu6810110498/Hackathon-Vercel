@@ -64,16 +64,39 @@ export async function analyzeWriting(
   if (process.env.DEMO_MODE === "true") {
     console.log("[Demo Mode] Returning mock writing analysis response.");
     return {
-      level: `HSK${hskLevel}` as HSKLevel,
-      score: { total: 85, grammar: 22, vocabulary: 21, coherence: 22, native: 20, passed: true },
+      level: `HSK${hskLevel >= 6 ? 6 : hskLevel}` as HSKLevel,
+      score: { total: 92, grammar: 23, vocabulary: 24, coherence: 22, native: 23, passed: true },
       errors: [
-        { id: "demo-1", type: "คำศัพท์", category: "vocabulary", severity: "minor", original: "高幸", suggestion: "高兴", explanation: "สะกดผิด คำว่า ดีใจ คือ 高兴", position: { start: 0, end: 2 } }
+        { 
+          id: "err-1", 
+          type: "ระดับภาษา (Formal Tone)", 
+          category: "vocabulary", 
+          severity: "important", 
+          original: "我们必须保护环境", 
+          suggestion: "我们应当致力于环境保护", 
+          explanation: "ในระดับ HSK 6 ควรใช้คำที่เป็นทางการมากขึ้น เช่น 致力于 (อุทิศตนเพื่อ/มุ่งมั่นเพื่อ) แทนคำพื้นฐาน", 
+          position: { start: 10, end: 18 } 
+        },
+        { 
+          id: "err-2", 
+          type: "ความเชื่อมโยง (Coherence)", 
+          category: "grammar", 
+          severity: "minor", 
+          original: "不仅要种树，也要减少污染", 
+          suggestion: "不仅仅要植树造林，更要从源头上减少污染", 
+          explanation: "การใช้สำนวน 植树造林 (ปลูกป่า) และ 更 (ยิ่งไปกว่านั้น) จะช่วยให้ประโยคดูสละสลวยและสื่อความหมายได้ลึกซึ้งกว่า", 
+          position: { start: 25, end: 38 } 
+        }
       ],
-      summary: "สำหรับการเขียนครั้งนี้ทำได้ดีมากครับ (Demo)",
-      feedback: "เขียนได้ลื่นไหลและใช้โครงสร้างประโยคที่ถูกต้อง",
-      nativeTip: "คนไทยมักสะกดคำว่า 高兴 ผิดบ่อยๆ",
-      rewrite: "我今天很高兴。(Demo Rewrite)",
-      nativeScore: 88,
+      summary: "การเขียนนี้แสดงถึงความเข้าใจในระดับ HSK 6 ได้ดีมาก มีการใช้ไวยากรณ์ขั้นสูงและความเชื่อมโยงที่ชัดเจน (Demo Analysis)",
+      feedback: "คุณมีความสามารถในการใช้คำศัพท์เฉพาะทางได้ดี แต่ควรระวังเรื่องการเลือกใช้ระดับภาษา (Register) ให้เหมาะสมกับบริบทที่เป็นทางการมากขึ้น",
+      nativeTip: "คนจีนนิยมใช้ 成语 (สำนวน 4 ตัว) เพื่อยกระดับความน่าเชื่อถือของบทความวิจัยหรือเรียงความเชิงวิชาการ",
+      rewrite: "在当前全球化发展的背景下，环境保护已成为各国政府亟待解决的首要任务。我们不仅仅要致力于植树造林、绿化家园，更要从源头上采取有效措施减少工业污染。只有加强国际合作，才能共同构建人类命运共同体，实现可持续发展的长远目标。",
+      nativeScore: 95,
+      fixPriorities: [
+        { issue: "ระดับภาษา (Static level)", impact: "High", suggestion: "ใช้คำจำพวก 致力于, 亟待 แทนคำกริยาพื้นฐาน" },
+        { issue: "ความคล่องแคล่ว (Fluency)", impact: "Medium", suggestion: "พยายามใช้สำนวน สี่ตัว (Cheng-yu) ในบทสรุป" }
+      ]
     };
   }
 
@@ -207,16 +230,32 @@ export async function analyzeReading(
   if (process.env.DEMO_MODE === "true") {
     console.log("[Demo Mode] Returning mock reading analysis response.");
     return {
-      level: `HSK${hskLevel}` as HSKLevel,
-      summary: "บทความนี้พูดถึงการท่องเที่ยวในปักกิ่ง (Demo Summary)",
+      level: `HSK${hskLevel >= 5 ? hskLevel : 5}` as HSKLevel,
+      summary: "บทความวิเคราะห์ถึงผลกระทบของการพัฒนาเทคโนโลยีปัญญาประดิษฐ์ (AI) ที่มีต่อระบบการศึกษาในศตวรรษที่ 21 รวมถึงความท้าทายและการปรับตัวของบุคลากร (Demo Analysis)",
       vocabulary: [
-        { word: "北京", pinyin: "Běijīng", meaning: "ปักกิ่ง", example: "我住在北京。" }
+        { word: "人工智能", pinyin: "réngōng zhìnéng", meaning: "ปัญญาประดิษฐ์ (AI)", example: "人工智能正在改变我们的生活方式。", hskLevel: 6 },
+        { word: "飞速", pinyin: "fēisù", meaning: "อย่างรวดเร็ว (ดั่งบิน)", example: "科技正在飞速发展。", hskLevel: 5 },
+        { word: "核心", pinyin: "héxīn", meaning: "แกนกลาง/หัวใจสำคัญ", example: "技术创新是教育变革的核心。", hskLevel: 5 }
       ],
       questions: [
-        { id: "demo-q1", question: "บทความนี้พูดถึงเมืองอะไร?", options: ["เซี่ยงไฮ้", "ปักกิ่ง", "หางโจว", "เฉิงตู"], correctIndex: 1, explanation: "ในบทความระบุชัดเจนว่าท่องเที่ยวในปักกิ่ง" }
+        { 
+          id: "q-1", 
+          question: "根据这段文字，技术对教育的主要影响是什么？", 
+          options: ["取代教师的所有工作", "改变学习和教学的方式", "降低学生的学习兴趣", "减少教育成本"], 
+          correctIndex: 1, 
+          explanation: "ในบทความเน้นเรื่องการเปลี่ยนแปลงรูปแบบการเรียนการสอน (改变学习和教学的方式) มากกว่าการเข้ามาแทนที่ครูทั้งหมด" 
+        },
+        { 
+          id: "q-2", 
+          question: "文中提到的‘核心’一词是指什么？", 
+          options: ["技术的速度", "教育的变革", "创新的地位", "人类的智力"], 
+          correctIndex: 2, 
+          explanation: "คำว่า 核心 (Core) ในที่นี้ใช้ขยายคำว่า 创新 (Innovation) เพื่อบอกว่าเป็นหัวใจสำคัญของการเปลี่ยนแปลง" 
+        }
       ],
       difficultWords: [
-        { word: "北京", commonMistake: "ไป๋จิง", correct: "เป่ยจิง" }
+        { word: "人工智能", commonMistake: "เข้าใจว่าเป็นแค่คอมพิวเตอร์ธรรมดา", correct: "เน้นกระบวนการเลียนแบบสติปัญญาของมนุษย์" },
+        { word: "飞速", commonMistake: "ใช้กับการเคลื่อนที่ของวัตถุเท่านั้น", correct: "สามารถใช้กับการพัฒนาก้าวหน้า (Development) ได้ด้วย" }
       ]
     };
   }
@@ -281,13 +320,22 @@ export async function generateExercises(
     console.log("[Demo Mode] Returning mock exercise response.");
     return [
       {
-        id: "demo-ex-1",
+        id: "ex-1",
         type: "multiple-choice",
-        question: "ฉันชอบกินแอปเปิ้ล (ภาษาจีนคือ?)",
-        options: ["我喜欢吃苹果", "我喜欢看苹果", "我喜欢买苹果", "我喜欢做苹果"],
-        answer: "我喜欢吃苹果",
-        explanation: "คำว่า 'กิน' คือ 吃 (chī)",
-        targetPattern: "Basic Vocabulary"
+        question: "选出最合适的词语：面对复杂的情况，我们应当______，不要自乱阵脚。",
+        options: ["沉着冷静", "致力于", "飞速发展", "欣喜若狂"],
+        answer: "沉着冷静",
+        explanation: "ในสถานการณ์ที่ซับซ้อน (复杂的情况) ควรทำตัว 'สงบนิ่งและเยือกเย็น' (沉着冷静) เพื่อไม่ให้สับสน",
+        targetPattern: "HSK 6 Formal Adverbs"
+      },
+      {
+        id: "ex-2",
+        type: "fill-blank",
+        question: "这项技术的研发大大______了生产效率。(A. 致力于 B. 提高了 C. 改善了 D. 增加了)",
+        options: ["A", "B", "C", "D"],
+        answer: "B",
+        explanation: "คำว่า 效率 (Efficiency) นิยมใช้คู่กับตัวเลือก B (提高 - ยกระดับ/เพิ่มขึ้น)",
+        targetPattern: "Collocation Patterns"
       }
     ];
   }
