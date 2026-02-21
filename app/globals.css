@@ -1,0 +1,175 @@
+/* Noto Sans Thai + Noto Sans SC (400, 500, 700). Inter loaded via Next.js in layout. */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════
+   COLOR SYSTEM — LIGHT MODE ONLY
+   Clean & Trustworthy (Notion / Linear / Clerk)
+   ═══════════════════════════════════════ */
+@layer base {
+  :root {
+    /* Base */
+    --color-bg-base: #f7f8fc;
+    --color-bg-surface: #ffffff;
+    --color-bg-elevated: #f0f2f8;
+    --color-bg-overlay: #e8eaf2;
+    /* Border */
+    --color-border: #e2e4ef;
+    --color-border-subtle: #eceef7;
+    --color-border-strong: #c5c8e0;
+    /* Brand — Indigo */
+    --color-brand: #5b6af0;
+    --color-brand-hover: #4a58e0;
+    --color-brand-muted: #eef0fd;
+    --color-brand-glow: rgba(91, 106, 240, 0.15);
+    /* Accent — Soft Violet */
+    --color-accent: #7c6af0;
+    --color-accent-muted: #f0eefe;
+    /* Text */
+    --color-text-primary: #111827;
+    --color-text-secondary: #4b5280;
+    --color-text-tertiary: #9ca3bf;
+    --color-text-inverse: #ffffff;
+    /* Semantic */
+    --color-success: #059669;
+    --color-success-muted: #ecfdf5;
+    --color-error: #dc2626;
+    --color-error-muted: #fef2f2;
+    --color-warning: #d97706;
+    --color-warning-muted: #fffbeb;
+    /* Chinese accent */
+    --color-chinese: #dc2626;
+    --color-chinese-muted: #fef2f2;
+    /* Radius */
+    --radius: 0.5rem;
+    --radius-lg: 0.75rem;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: "Inter", "Noto Sans Thai", "Noto Sans SC", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+}
+
+/* Selection */
+::selection {
+  background: var(--color-brand-glow);
+  color: var(--color-text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Chinese text — e.g. textarea input */
+.text-chinese {
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+/* Thai explanations */
+.text-thai {
+  font-family: "Noto Sans Thai", sans-serif;
+  line-height: 1.7;
+}
+
+/* Gradient text — logo only */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card hover transition */
+@layer components {
+  .shadow-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+  }
+  .shadow-card-hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Page enter animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeUp 0.25s ease forwards;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    var(--color-bg-overlay) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
