@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Command,
+  BrainCircuit,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { href: "/", icon: LayoutDashboard, label: "Overview" },
   { href: "/essay", icon: PenLine, label: "Essay Grader" },
   { href: "/reading", icon: BookOpen, label: "Reading" },
+  { href: "/exercise", icon: BrainCircuit, label: "Practice" },
   { href: "/mock-exam", icon: Target, label: "Mock Exam" },
   { href: "/flashcards", icon: Layers, label: "Flashcards" },
   { href: "/progress", icon: BarChart3, label: "Progress" },

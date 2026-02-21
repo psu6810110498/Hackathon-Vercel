@@ -31,6 +31,12 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Resources & Data
+Resource/
+Hackathon-Vercel/
+scripts/__pycache__/
+*.json.bak
+
 # Vercel
 .vercel
 

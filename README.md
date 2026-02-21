@@ -1,64 +1,88 @@
-# HSK AI Coach
+# HSK AI Coach: Enterprise Language Intelligence
 
-แพลตฟอร์มเตรียมสอบ **HSK 4–6** ด้วย AI สำหรับนักเรียนไทย — วิเคราะห์การเขียนและบทความอ่าน พร้อมคำศัพท์และคำถามความเข้าใจ
+> แพลตฟอร์มเตรียมสอบ **HSK 4–6** ด้วย AI สำหรับนักเรียนไทย — วิเคราะห์การเขียนและบทความอ่าน พร้อมคำศัพท์และคำถามความเข้าใจ
 
-## Features
+HSK AI Coach is a sophisticated, full-stack linguistic intelligence platform designed to bridge the gap between intermediate Chinese mastery and professional proficiency. By leveraging state-of-the-art Large Language Models (LLMs) and the **New HSK 3.0 (2021/2025) Standard**, it provides personalized, pedagogical feedback tailored specifically to the unique errors made by Thai learners.
 
-- **การเขียน:** วิเคราะห์บทความภาษาจีน — คะแนน, ข้อผิดพลาด (ไวยากรณ์/คำศัพท์), สรุปและข้อเสนอแนะเป็นภาษาไทย
-- **การอ่าน:** วิเคราะห์บทความ — รายการคำศัพท์ (พินอิน + ความหมาย) และคำถามแบบเลือกตอบ
-- **Auth:** Google OAuth + Email Magic Link (Resend)
-- **Usage:** แผนฟรี 3 ครั้ง/วัน, Premium 199 บาท/เดือน (ไม่จำกัด)
+---
 
-## Tech Stack
+## 🚀 The Intelligence Core: Dual-Model Pipeline
 
-| Layer    | Technology        |
-|----------|-------------------|
-| Framework| Next.js 14 (App Router) |
-| Language | TypeScript (strict)    |
-| Styling  | Tailwind CSS + shadcn/ui |
-| Auth     | NextAuth.js v5         |
-| Database | Supabase (PostgreSQL)  |
-| ORM      | Prisma                 |
-| AI       | Claude (Anthropic), DeepSeek (optional) |
-| Deploy   | Vercel                 |
+Unlike generic AI tools, HSK AI Coach utilizes a proprietary **Dual-Model Pipeline** to ensure extreme linguistic accuracy:
 
-## Quick Start
+1.  **Linguistic Layer (DeepSeek)**: ทำหน้าที่ตรวจตราไวยากรณ์ (Grammar Parsing) และการเลือกใช้คำ (Word Choice) ในเชิงลึก
+2.  **Pedagogical Layer (Claude 3.5)**: ทำหน้าที่เป็น "ครูสอนภาษาไทย" ที่สรุปข้อมูลจากการวิเคราะห์ เป็นข้อเสนอแนะที่เข้าใจง่าย ให้คะแนน 4 มิติ และเขียนใหม่ (Rewrite) ให้สละสลวยแบบคนจีน
+
+---
+
+## 🛠️ Main Menu Modules
+
+### 1. 📊 Overview (Command Center)
+
+- **HSK Readiness Score**: ทำนายความพร้อมในการสอบ HSK แบบ Real-time
+- **Daily Analytics**: ติดตามการใช้งานรายวันตามโควต้าแผนฟรี 3 ครั้ง/วัน
+
+### 2. ✍️ Essay Grader (การเขียน)
+
+- **4D Scoring**: วิเคราะห์คะแนน Grammar, Vocabulary, Coherence และ Native Naturalness (คะแนนเต็ม 100)
+- **Error Mapping**: ระบุตำแหน่งข้อผิดพลาดรายตัวอักษร พร้อมระดับความรุนแรง (Severity)
+- **AI Rewrite**: สร้างตัวอย่างการเขียนที่ถูกต้องและเป็นธรรมชาติที่สุดเพื่อการศึกษา
+
+### 3. 📖 Reading (การอ่าน)
+
+- **Auto-Summary**: สรุปบทความภาษาจีนที่ซับซ้อนให้เป็นภาษาไทยทันที
+- **HSK 3.0 Vocab**: สกัดคำศัพท์สำคัญพร้อมพินอิน ระดับคำศัพท์ และเคล็ดลับการจำสำหรับคนไทย
+- **Difficult Words Guard**: ไฮไลท์คำศัพท์ที่คนไทยมักจะแปลหรือเข้าใจผิดบ่อยๆ (Common Traps)
+
+### 4. 🧠 Practice (แบบฝึกหัดเฉพาะบุคคล)
+
+- **Weakness-Driven**: AI ดึงข้อมูลจากประวัติข้อผิดพลาดของคุณ (ErrorLog) มาสร้างโจทย์
+- **Tailored Tasks**: สร้างแบบฝึกหัดเติมคำ, เลือกตอบ หรือแก้ประโยคที่เน้นจุดอ่อนของคุณโดยเฉพาะ
+
+### 5. 🎯 Mock Exam & 🃏 Flashcards (Roadmap)
+
+- **Exam Simulation**: ข้อสอบจำลอง HSK 4-6 เต็มรูปแบบ พร้อมระบบจับเวลา
+- **SRS Flashcards**: ระบบบัตรคำศัพท์อัจฉริยะ (Spaced Repetition) เพื่อการจำที่ยั่งยืน
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer     | Technology                            |
+| --------- | ------------------------------------- |
+| Framework | Next.js 14 (App Router)               |
+| Language  | TypeScript (strict)                   |
+| Styling   | Tailwind CSS + shadcn/ui              |
+| Auth      | NextAuth.js v5 (Google OAuth)         |
+| Database  | Supabase (PostgreSQL) + Prisma ORM    |
+| AI        | Claude 3.5 & DeepSeek (Dual Pipeline) |
+| Standard  | New HSK 3.0 (2021/2025) Vocab System  |
+
+---
+
+## 📥 Quick Start
 
 ```bash
 git clone https://github.com/psu6810110498/Hackathon-Vercel.git
 cd Hackathon-Vercel
-cp .env.example .env          # หรือ .env.local — แล้วกรอกค่า
+cp .env.example .env          # กรอกค่า API Keys และ DATABASE_URL
 npm install
-npm run db:generate
-npm run db:push
+npm run db:push               # ดัน Schema ไปยัง Database
 npm run dev
 ```
 
 เปิด [http://localhost:3000](http://localhost:3000)
 
-รายละเอียดติดตั้งและแก้ปัญหา: **[docs/SETUP.md](docs/SETUP.md)**  
-เช็คก่อน Build (DB + Claude + DeepSeek): **[docs/BEFORE-BUILD.md](docs/BEFORE-BUILD.md)**
+---
 
-## Project Structure (สรุป)
+## 📄 Documentation & Guides
 
-- `app/` — App Router: (auth), (dashboard), api, layout, page
-- `components/` — ui (shadcn), features (writing, reading, shared), layout
-- `lib/` — ai (claude, deepseek, prompts, analyzer), db (prisma, queries), auth, utils
-- `types/` — analysis, auth, database
-- `prisma/` — schema, seed
-- `docs/` — SETUP, ARCHITECTURE, API, PROMPTS
+- [SETUP.md](docs/SETUP.md) — การติดตั้งและรันอย่างละเอียด
+- [BEFORE-BUILD.md](docs/BEFORE-BUILD.md) — เช็คลิสต์ก่อน Deploy (DB + AI Config)
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — เจาะลึกโครงสร้างระบบและ Data Flow
+- [PROMPTS.md](docs/PROMPTS.md) — รายละเอียด AI Prompt Engineering ที่ใช้ในระบบ
 
-## Documentation
+---
 
-- [SETUP.md](docs/SETUP.md) — การติดตั้งและรัน
-- [BEFORE-BUILD.md](docs/BEFORE-BUILD.md) — เช็คก่อน Build (DB + Claude + DeepSeek)
-- [TEAM.md](docs/TEAM.md) — แผนแบ่งงาน (คุณ + เพื่อน)
-- [CONTRIBUTING.md](docs/CONTRIBUTING.md) — แนวทางสำหรับทีม (ก่อน push)
-- [PRE-PUSH-CHECKLIST.md](docs/PRE-PUSH-CHECKLIST.md) — เช็คลิสต์ก่อน push
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — สถาปัตยกรรมและ data flow
-- [API.md](docs/API.md) — API endpoints
-- [PROMPTS.md](docs/PROMPTS.md) — คำอธิบาย AI prompts
-
-## License
-
-Private / Hackathon use.
+**License**: Private / Hackathon Use.  
+Copyright © 2026 HSK AI Coach. All rights reserved.

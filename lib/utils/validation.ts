@@ -5,7 +5,7 @@
 const MIN_ESSAY_LENGTH = 50;
 const MAX_ESSAY_LENGTH = 2000;
 const MIN_READING_LENGTH = 100;
-const MAX_READING_LENGTH = 5000;
+const MAX_READING_LENGTH = 1000;
 const VALID_HSK_LEVELS = [1, 2, 3, 4, 5, 6] as const;
 const VALID_HSK_LEVELS_WRITING = [3, 4, 5, 6] as const;
 
@@ -34,7 +34,7 @@ export function isValidHskLevelForWriting(level: unknown): level is 3 | 4 | 5 | 
 /**
  * Validate essay input length and type
  */
-export function validateEssayInput(text: unknown): {
+export function validateEssayInput(text: unknown, level?: number): {
   valid: boolean;
   error?: string;
   data?: string;
@@ -43,16 +43,22 @@ export function validateEssayInput(text: unknown): {
     return { valid: false, error: "ข้อความต้องเป็นตัวอักษร" };
   }
   const trimmed = text.trim();
+  
+  let maxChars = MAX_ESSAY_LENGTH;
+  if (level === 4) maxChars = 300;
+  else if (level === 5) maxChars = 500;
+  else if (level === 6) maxChars = 800;
+  
   if (trimmed.length < MIN_ESSAY_LENGTH) {
     return {
       valid: false,
       error: `กรุณาพิมพ์อย่างน้อย ${MIN_ESSAY_LENGTH} ตัวอักษร`,
     };
   }
-  if (trimmed.length > MAX_ESSAY_LENGTH) {
+  if (trimmed.length > maxChars) {
     return {
       valid: false,
-      error: `ข้อความยาวเกิน ${MAX_ESSAY_LENGTH} ตัวอักษร`,
+      error: `ข้อความยาวเกิน ขีดจำกัดที่ ${maxChars} ตัวอักษร สำหรับระดับนี้`,
     };
   }
   return { valid: true, data: trimmed };
@@ -79,7 +85,7 @@ export function validateReadingInput(text: unknown): {
   if (trimmed.length > MAX_READING_LENGTH) {
     return {
       valid: false,
-      error: `ข้อความยาวเกิน ${MAX_READING_LENGTH} ตัวอักษร`,
+      error: `ข้อความยาวเกิน ${MAX_READING_LENGTH} ตัวอักษร กรุณาตัดแบ่งการวิเคราะห์ (Chunking)`,
     };
   }
   return { valid: true, data: trimmed };

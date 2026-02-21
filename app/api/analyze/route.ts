@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const { text, hskLevel: level } = body;
 
-    const inputCheck = validateEssayInput(text);
+    const inputCheck = validateEssayInput(text, level);
     if (!inputCheck.valid) {
       return NextResponse.json(
         { error: inputCheck.error ?? "ข้อมูลไม่ถูกต้อง" },

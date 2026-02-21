@@ -34,9 +34,9 @@ const LEVEL_OPTIONS: { value: HskLevelNum; label: string }[] = [
 ];
 
 const OPTIMAL_RANGES: Record<number, { min: number; max: number }> = {
-  4: { min: 80, max: 120 },
-  5: { min: 120, max: 200 },
-  6: { min: 200, max: 400 },
+  4: { min: 80, max: 300 },
+  5: { min: 120, max: 500 },
+  6: { min: 200, max: 800 },
 };
 
 export default function EssayPage() {
