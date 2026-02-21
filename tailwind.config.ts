@@ -9,85 +9,74 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /* Legacy names → map to new palette (light only) */
-        border: "#E2E4EF",
-        input: "#E2E4EF",
-        ring: "#5B6AF0",
-        background: "#F7F8FC",
-        foreground: "#111827",
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "#5B6AF0",
-          foreground: "#FFFFFF",
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
         },
         secondary: {
-          DEFAULT: "#FFFFFF",
-          foreground: "#4B5280",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         destructive: {
-          DEFAULT: "#DC2626",
-          foreground: "#FFFFFF",
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
         muted: {
-          DEFAULT: "#F0F2F8",
-          foreground: "#9CA3BF",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
         },
         accent: {
-          DEFAULT: "#F0F2F8",
-          foreground: "#111827",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
         },
         card: {
-          DEFAULT: "#FFFFFF",
-          foreground: "#111827",
-        },
-        /* New design tokens */
-        brand: {
-          DEFAULT: "#5B6AF0",
-          hover: "#4A58E0",
-          muted: "#EEF0FD",
-        },
-        accentViolet: {
-          DEFAULT: "#7C6AF0",
-          muted: "#F0EEFE",
-        },
-        surface: {
-          base: "#F7F8FC",
-          card: "#FFFFFF",
-          elevated: "#F0F2F8",
-          overlay: "#E8EAF2",
-        },
-        content: {
-          primary: "#111827",
-          secondary: "#4B5280",
-          tertiary: "#9CA3BF",
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
         },
         success: {
-          DEFAULT: "#059669",
-          muted: "#ECFDF5",
-        },
-        error: {
-          DEFAULT: "#DC2626",
-          muted: "#FEF2F2",
+          DEFAULT: "#10B981",
+          muted: "rgba(16, 185, 129, 0.1)",
         },
         warning: {
-          DEFAULT: "#D97706",
-          muted: "#FFFBEB",
+          DEFAULT: "#F59E0B",
+          muted: "rgba(245, 158, 11, 0.1)",
         },
+        error: {
+          DEFAULT: "#EF4444",
+          muted: "rgba(239, 68, 68, 0.1)",
+        },
+        brand: {
+          DEFAULT: "#0070F3", // Vercel Blue
+          hover: "#0060E5",
+          muted: "rgba(0, 112, 243, 0.1)",
+        }
       },
       fontFamily: {
-        sans: ["Inter", "Noto Sans Thai", "Noto Sans SC", "sans-serif"],
+        sans: ["Geist", "Noto Sans Thai", "system-ui", "sans-serif"],
+        heading: ["Geist", "system-ui", "sans-serif"],
+        hanzi: ["Noto Serif TC", "Noto Sans SC", "serif"],
+        chinese: ["Noto Sans SC", "sans-serif"],
+        thai: ["Noto Sans Thai", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       borderRadius: {
-        lg: "12px",
-        md: "8px",
-        sm: "6px",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        card: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)",
-        "card-hover":
-          "0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)",
-        brand: "0 4px 12px rgba(91,106,240,0.25)",
-        "brand-inset": "inset 0 1px 0 rgba(255,255,255,0.15)",
-        input: "0 0 0 3px rgba(91,106,240,0.12)",
+        card: "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
+        "card-hover": "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05)",
+        glow: "0 0 16px rgba(0, 112, 243, 0.15)",
       },
     },
   },
