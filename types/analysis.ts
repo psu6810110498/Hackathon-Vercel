@@ -1,6 +1,6 @@
 /**
  * Analysis result types for Writing and Reading modes
- * Last updated: HanziAI Hackathon — Core Value types
+ * HSK AI Coach — "Calm Intelligence" enhanced types
  */
 
 // ─────────────────────────────────────
@@ -20,9 +20,11 @@ export type ErrorCategory =
   | "vocabulary"
   | "coherence"
   | "measure_word"
-  | "word_order";
+  | "word_order"
+  | "naturalness";
 
-export type ErrorSeverity = "high" | "medium" | "low";
+/** Softer severity labels (UX-reviewed) */
+export type ErrorSeverity = "minor" | "important" | "must-fix";
 
 export type ExerciseType =
   | "fill-blank"
@@ -30,7 +32,7 @@ export type ExerciseType =
   | "error-correction";
 
 // ─────────────────────────────────────
-// WRITING TYPES
+// WRITING TYPES (Enhanced)
 // ─────────────────────────────────────
 
 /** Single error item from writing analysis */
@@ -42,10 +44,11 @@ export interface IWritingError {
   original: string;
   suggestion: string;
   explanation: string;
-  /** Core Value — เคล็ดลับสำหรับคนไทยที่มักผิดจุดนี้ */
+  /** เคล็ดลับสำหรับคนไทยที่มักผิดจุดนี้ */
   thaiMistakeTip?: string;
   /** อ้างอิงกฎ HSK (เช่น 把字句, 量词) */
   hskRule?: string;
+  /** Character position in essay text */
   position?: { start: number; end: number };
 }
 
@@ -60,26 +63,40 @@ export interface IExercise {
   targetPattern: string;
 }
 
-/** Score breakdown */
+/** 4-dimension score breakdown (25 points each = 100 total) */
 export interface IScoreBreakdown {
   total: number;
   grammar: number;
   vocabulary: number;
   coherence: number;
+  native: number;
   passed: boolean;
 }
 
-/** Writing analysis API result */
+/** Fix priority suggestion from AI */
+export interface IFixPriority {
+  issue: string;
+  impact: string;
+  suggestion: string;
+}
+
+/** Writing analysis API result (enhanced with rewrite, native score, fix priorities) */
 export interface IWritingAnalysisResult {
   level: HSKLevel;
-  /** รองรับทั้ง score ตัวเลขเดิม และ breakdown */
+  /** Score breakdown: grammar/vocab/coherence/native out of 25 each */
   score: number | IScoreBreakdown;
   errors: IWritingError[];
   exercises?: IExercise[];
   summary: string;
   feedback: string;
-  /** Core Value — คำแนะนำสำหรับคนไทยโดยเฉพาะ */
+  /** คำแนะนำสำหรับคนไทยโดยเฉพาะ */
   nativeTip?: string;
+  /** AI-rewritten version of the essay */
+  rewrite?: string;
+  /** Naturalness percentage 0-100 */
+  nativeScore?: number;
+  /** Top 3 fix priorities for fastest improvement */
+  fixPriorities?: IFixPriority[];
 }
 
 // ─────────────────────────────────────
@@ -146,7 +163,35 @@ export interface IApiResponse<T> {
   error?: string;
 }
 
-/** Get numeric score from either legacy number or IScoreBreakdown (for DB/UI) */
+/** Get numeric score from either legacy number or IScoreBreakdown */
 export function getScoreTotal(score: number | IScoreBreakdown): number {
   return typeof score === "number" ? score : score.total;
+}
+
+/** Get native score interpretation label */
+export function getNativeLabel(score: number): {
+  label: string;
+  color: string;
+} {
+  if (score >= 90) return { label: "Native-like", color: "#2ECC8F" };
+  if (score >= 70) return { label: "Natural", color: "#4BA3D9" };
+  if (score >= 50) return { label: "Understandable", color: "#F5A623" };
+  return { label: "Needs work", color: "#E85D5D" };
+}
+
+/** Get severity display info */
+export function getSeverityInfo(severity?: ErrorSeverity): {
+  label: string;
+  emoji: string;
+  className: string;
+} {
+  switch (severity) {
+    case "must-fix":
+      return { label: "Must Fix", emoji: "🔴", className: "severity-must-fix" };
+    case "important":
+      return { label: "Important", emoji: "🟠", className: "severity-important" };
+    case "minor":
+    default:
+      return { label: "Minor", emoji: "🟡", className: "severity-minor" };
+  }
 }
