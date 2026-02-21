@@ -11,6 +11,7 @@ import {
   SYSTEM_PROMPT_READING,
   USER_PROMPT_READING,
 } from "./prompts";
+import { getWordLevel } from "../hsk/validator";
 import type {
   IWritingAnalysisResult,
   IReadingAnalysisResult,
@@ -57,9 +58,59 @@ export async function analyzeWriting(
   essay: string,
   hskLevel: number
 ): Promise<IWritingAnalysisResult | null> {
+  // Master Plan Phase 6: Demo Fail-Safe Mode
+  if (process.env.DEMO_MODE === "true") {
+    console.log("[Demo Mode] Returning mock writing analysis response.");
+    return {
+      level: `HSK${hskLevel}` as HSKLevel,
+      score: { total: 85, grammar: 22, vocabulary: 21, coherence: 22, native: 20, passed: true },
+      errors: [
+        { id: "demo-1", type: "คำศัพท์", category: "vocabulary", severity: "minor", original: "高幸", suggestion: "高兴", explanation: "สะกดผิด คำว่า ดีใจ คือ 高兴", position: { start: 0, end: 2 } }
+      ],
+      summary: "สำหรับการเขียนครั้งนี้ทำได้ดีมากครับ (Demo)",
+      feedback: "เขียนได้ลื่นไหลและใช้โครงสร้างประโยคที่ถูกต้อง",
+      nativeTip: "คนไทยมักสะกดคำว่า 高兴 ผิดบ่อยๆ",
+      rewrite: "我今天很高兴。(Demo Rewrite)",
+      nativeScore: 88,
+    };
+  }
+
+  let deepseekContext: string | undefined;
+  try {
+    const dsResult = await callDeepSeek(
+      `You are a strict Chinese parsing engine. Check for grammar and wording. Return plain text notes.`,
+      `Text:\n${essay}`
+    );
+    if (dsResult) {
+      deepseekContext = dsResult;
+    }
+  } catch (err) {
+    console.error("[DeepSeek pipeline] Failed, falling back directly to Claude.", err);
+  }
+
   const system = SYSTEM_PROMPT_WRITING;
-  const user = USER_PROMPT_WRITING(hskLevel, essay);
-  const raw = await callClaude(system, user);
+  const user = USER_PROMPT_WRITING(hskLevel, essay, deepseekContext);
+  
+  let raw: string | null = null;
+  // Master plan 1.2 Failure Safe Logic: invalid JSON -> retry once
+  let retryCount = 0;
+  
+  while (retryCount < 2) {
+    raw = await callClaude(system, user);
+    if (!raw) {
+      retryCount++;
+      continue;
+    }
+    
+    const parsedTest = parseJson<Record<string, unknown>>(raw);
+    if (!parsedTest || !Array.isArray(parsedTest.errors)) {
+      console.warn(`[Claude pipeline] Invalid JSON format. Retry: ${retryCount + 1}`);
+      retryCount++;
+      continue;
+    }
+    break; // Success
+  }
+
   if (!raw) return null;
 
   const parsed = parseJson<Record<string, unknown>>(raw);
@@ -150,6 +201,24 @@ export async function analyzeReading(
   passage: string,
   hskLevel: number
 ): Promise<IReadingAnalysisResult | null> {
+  // Master Plan Phase 6: Demo Fail-Safe Mode
+  if (process.env.DEMO_MODE === "true") {
+    console.log("[Demo Mode] Returning mock reading analysis response.");
+    return {
+      level: `HSK${hskLevel}` as HSKLevel,
+      summary: "บทความนี้พูดถึงการท่องเที่ยวในปักกิ่ง (Demo Summary)",
+      vocabulary: [
+        { word: "北京", pinyin: "Běijīng", meaning: "ปักกิ่ง", example: "我住在北京。" }
+      ],
+      questions: [
+        { id: "demo-q1", question: "บทความนี้พูดถึงเมืองอะไร?", options: ["เซี่ยงไฮ้", "ปักกิ่ง", "หางโจว", "เฉิงตู"], correctIndex: 1, explanation: "ในบทความระบุชัดเจนว่าท่องเที่ยวในปักกิ่ง" }
+      ],
+      difficultWords: [
+        { word: "北京", commonMistake: "ไป๋จิง", correct: "เป่ยจิง" }
+      ]
+    };
+  }
+
   const system = SYSTEM_PROMPT_READING;
   const user = USER_PROMPT_READING(hskLevel, passage);
   const raw = await callClaude(system, user);
@@ -164,13 +233,17 @@ export async function analyzeReading(
 
   const vocabulary: IReadingVocab[] = (parsed.vocabulary || []).map((v: unknown) => {
     const x = v as Record<string, unknown>;
+    const word = String(x?.word ?? "");
+    // Cross-reference with our strict 2025 list
+    const actualLevel = getWordLevel(word);
+    
     return {
-      word: String(x?.word ?? ""),
+      word,
       pinyin: String(x?.pinyin ?? ""),
       meaning: String(x?.meaning ?? ""),
       thaiTip: x?.thaiTip != null ? String(x.thaiTip) : undefined,
       example: x?.example != null ? String(x.example) : undefined,
-      hskLevel: x?.hskLevel != null ? Number(x.hskLevel) : undefined,
+      hskLevel: actualLevel !== null ? actualLevel : (x?.hskLevel != null ? Number(x.hskLevel) : undefined),
     };
   });
 
@@ -192,4 +265,41 @@ export async function analyzeReading(
     difficultWords: Array.isArray(parsed.difficultWords) ? (parsed.difficultWords as IReadingAnalysisResult["difficultWords"]) : undefined,
     summary: String(parsed.summary ?? ""),
   };
+}
+
+/**
+ * Generate Personalized Exercises — primary: Claude
+ */
+export async function generateExercises(
+  weakPatterns: string,
+  hskTarget: number
+): Promise<IWritingAnalysisResult["exercises"] | null> {
+  // Master Plan Phase 6: Demo Fail-Safe Mode
+  if (process.env.DEMO_MODE === "true") {
+    console.log("[Demo Mode] Returning mock exercise response.");
+    return [
+      {
+        id: "demo-ex-1",
+        type: "multiple-choice",
+        question: "ฉันชอบกินแอปเปิ้ล (ภาษาจีนคือ?)",
+        options: ["我喜欢吃苹果", "我喜欢看苹果", "我喜欢买苹果", "我喜欢做苹果"],
+        answer: "我喜欢吃苹果",
+        explanation: "คำว่า 'กิน' คือ 吃 (chī)",
+        targetPattern: "Basic Vocabulary"
+      }
+    ];
+  }
+
+  const system = import("./prompts").then((m) => m.SYSTEM_PROMPT_EXERCISE);
+  const user = import("./prompts").then((m) => m.USER_PROMPT_EXERCISE(weakPatterns, hskTarget));
+  
+  const raw = await callClaude(await system, await user);
+  if (!raw) return null;
+
+  const parsed = parseJson<{ exercises: IWritingAnalysisResult["exercises"] }>(raw);
+  if (!parsed || !Array.isArray(parsed.exercises)) {
+    return null;
+  }
+
+  return parsed.exercises;
 }
