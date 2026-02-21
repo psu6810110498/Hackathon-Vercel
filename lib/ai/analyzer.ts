@@ -1,6 +1,6 @@
 /**
- * Main analysis orchestrator: calls Claude (primary), optional DeepSeek fallback
- * Parses JSON from AI and normalizes for API response
+ * Main analysis orchestrator: calls Claude (primary)
+ * Parses enhanced JSON response with 4D score, rewrite, native score
  */
 
 import { callClaude } from "./claude";
@@ -18,7 +18,9 @@ import type {
   IReadingVocab,
   IReadingQuestion,
   IScoreBreakdown,
+  IFixPriority,
   HSKLevel,
+  ErrorSeverity,
 } from "@/types/analysis";
 
 /**
@@ -39,7 +41,17 @@ function parseJson<T>(raw: string): T | null {
 }
 
 /**
- * Analyze essay (writing mode) — primary: Claude
+ * Normalize severity from AI response to our softer labels
+ */
+function normalizeSeverity(raw: unknown): ErrorSeverity {
+  const s = String(raw ?? "").toLowerCase();
+  if (s === "must-fix" || s === "must_fix" || s === "comprehension_breaking" || s === "high") return "must-fix";
+  if (s === "important" || s === "structural" || s === "medium") return "important";
+  return "minor";
+}
+
+/**
+ * Analyze essay (writing mode) — enhanced with 4D scoring
  */
 export async function analyzeWriting(
   essay: string,
@@ -53,21 +65,45 @@ export async function analyzeWriting(
   const parsed = parseJson<Record<string, unknown>>(raw);
   if (!parsed || !Array.isArray(parsed.errors)) return null;
 
-  const scoreNum =
-    typeof parsed.score === "number"
-      ? parsed.score
-      : parsed.score && typeof parsed.score === "object" && typeof (parsed.score as IScoreBreakdown).total === "number"
-        ? (parsed.score as IScoreBreakdown).total
-        : 0;
-  const level = (parsed.level as HSKLevel) ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : hskLevel === 4 ? "HSK4" : hskLevel === 3 ? "HSK3" : "HSK4");
+  // Parse score — handle both old (number) and new (breakdown object) format
+  let scoreBreakdown: IScoreBreakdown;
+  if (parsed.score && typeof parsed.score === "object" && !Array.isArray(parsed.score)) {
+    const s = parsed.score as Record<string, unknown>;
+    const grammar = Math.min(25, Math.max(0, Number(s.grammar ?? 0)));
+    const vocabulary = Math.min(25, Math.max(0, Number(s.vocabulary ?? 0)));
+    const coherence = Math.min(25, Math.max(0, Number(s.coherence ?? 0)));
+    const native = Math.min(25, Math.max(0, Number(s.native ?? 0)));
+    const total = grammar + vocabulary + coherence + native;
+    scoreBreakdown = {
+      total: Math.round(total),
+      grammar: Math.round(grammar),
+      vocabulary: Math.round(vocabulary),
+      coherence: Math.round(coherence),
+      native: Math.round(native),
+      passed: total >= 60,
+    };
+  } else {
+    // Legacy single number score
+    const num = Math.min(100, Math.max(0, Math.round(Number(parsed.score ?? 0))));
+    scoreBreakdown = {
+      total: num,
+      grammar: Math.round(num * 0.3),
+      vocabulary: Math.round(num * 0.25),
+      coherence: Math.round(num * 0.25),
+      native: Math.round(num * 0.2),
+      passed: num >= 60,
+    };
+  }
 
-  const errors: IWritingError[] = (parsed.errors as unknown[] || []).map((e: unknown, i: number) => {
+  const level = (parsed.level as HSKLevel) ?? (`HSK${hskLevel}` as HSKLevel);
+
+  const errors: IWritingError[] = ((parsed.errors as unknown[]) || []).map((e: unknown, i: number) => {
     const x = e as Record<string, unknown>;
     return {
       id: typeof x?.id === "string" ? x.id : `err-${i}`,
       type: String(x?.type ?? "อื่นๆ"),
-      category: x?.category as IWritingError["category"],
-      severity: x?.severity as IWritingError["severity"],
+      category: (x?.category as IWritingError["category"]) ?? "grammar",
+      severity: normalizeSeverity(x?.severity),
       original: String(x?.original ?? ""),
       suggestion: String(x?.suggestion ?? ""),
       explanation: String(x?.explanation ?? ""),
@@ -80,20 +116,35 @@ export async function analyzeWriting(
     };
   });
 
+  // Parse fix priorities
+  const fixPriorities: IFixPriority[] = Array.isArray(parsed.fixPriorities)
+    ? (parsed.fixPriorities as unknown[]).map((fp: unknown) => {
+        const f = fp as Record<string, unknown>;
+        return {
+          issue: String(f?.issue ?? ""),
+          impact: String(f?.impact ?? ""),
+          suggestion: String(f?.suggestion ?? ""),
+        };
+      }).slice(0, 3)
+    : [];
+
   const result: IWritingAnalysisResult = {
     level,
-    score: Math.min(100, Math.max(0, Math.round(scoreNum))),
+    score: scoreBreakdown,
     errors,
     exercises: Array.isArray(parsed.exercises) ? (parsed.exercises as IWritingAnalysisResult["exercises"]) : undefined,
     summary: String(parsed.summary ?? ""),
     feedback: String(parsed.feedback ?? ""),
     nativeTip: parsed.nativeTip != null ? String(parsed.nativeTip) : undefined,
+    rewrite: parsed.rewrite != null ? String(parsed.rewrite) : undefined,
+    nativeScore: parsed.nativeScore != null ? Math.min(100, Math.max(0, Number(parsed.nativeScore))) : undefined,
+    fixPriorities: fixPriorities.length > 0 ? fixPriorities : undefined,
   };
   return result;
 }
 
 /**
- * Analyze reading passage — primary: Claude
+ * Analyze reading passage — primary: Claude (unchanged)
  */
 export async function analyzeReading(
   passage: string,
@@ -109,7 +160,7 @@ export async function analyzeReading(
     return null;
   }
 
-  const level = (parsed.level as HSKLevel) ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : hskLevel === 4 ? "HSK4" : hskLevel === 3 ? "HSK3" : "HSK4");
+  const level = (parsed.level as HSKLevel) ?? (`HSK${hskLevel}` as HSKLevel);
 
   const vocabulary: IReadingVocab[] = (parsed.vocabulary || []).map((v: unknown) => {
     const x = v as Record<string, unknown>;
