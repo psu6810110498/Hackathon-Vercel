@@ -10,6 +10,8 @@ import {
   USER_PROMPT_WRITING,
   SYSTEM_PROMPT_READING,
   USER_PROMPT_READING,
+  SYSTEM_PROMPT_EXERCISE,
+  USER_PROMPT_EXERCISE,
 } from "./prompts";
 import { getWordLevel } from "../hsk/validator";
 import type {
@@ -290,10 +292,10 @@ export async function generateExercises(
     ];
   }
 
-  const system = import("./prompts").then((m) => m.SYSTEM_PROMPT_EXERCISE);
-  const user = import("./prompts").then((m) => m.USER_PROMPT_EXERCISE(weakPatterns, hskTarget));
+  const system = SYSTEM_PROMPT_EXERCISE;
+  const user = USER_PROMPT_EXERCISE(weakPatterns, hskTarget);
   
-  const raw = await callClaude(await system, await user);
+  const raw = await callClaude(system, user);
   if (!raw) return null;
 
   const parsed = parseJson<{ exercises: IWritingAnalysisResult["exercises"] }>(raw);
