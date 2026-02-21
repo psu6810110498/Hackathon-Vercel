@@ -32,7 +32,8 @@ yarn-error.log*
 Thumbs.db
 
 # Resources & Data
-Resource/
+Resource/*
+!Resource/Chinese_Vocab_Grammar/
 Hackathon-Vercel/
 scripts/__pycache__/
 *.json.bak
