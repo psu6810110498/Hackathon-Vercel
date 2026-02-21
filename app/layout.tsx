@@ -27,11 +27,7 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body className={sarabun.className}>
-        <SessionProvider>
-          <Navbar />
-          <main className="min-h-[calc(100vh-7rem)]">{children}</main>
-          <Footer />
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

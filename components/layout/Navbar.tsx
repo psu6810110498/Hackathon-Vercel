@@ -28,7 +28,7 @@ export async function Navbar() {
                 Dashboard
               </Link>
               <Link
-                href="/history"
+                href="/dashboard/history"
                 className="text-[13px] font-medium text-zinc-600 hover:text-black transition-colors hidden sm:block"
               >
                 History

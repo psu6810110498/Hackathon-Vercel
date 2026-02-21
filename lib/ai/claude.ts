@@ -5,7 +5,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 
-const model = "claude-sonnet-4-20250514";
+const model = "claude-3-5-sonnet-20240620";
 const maxTokens = 4096;
 
 /**

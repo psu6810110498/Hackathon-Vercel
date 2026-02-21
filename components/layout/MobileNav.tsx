@@ -17,12 +17,12 @@ import {
 } from "lucide-react";
 
 export const NAV_ITEMS = [
-  { href: "/", icon: LayoutDashboard, label: "Overview" },
-  { href: "/essay", icon: PenLine, label: "Essay Grader" },
-  { href: "/reading", icon: BookOpen, label: "Reading" },
-  { href: "/mock-exam", icon: Target, label: "Mock Exam" },
-  { href: "/flashcards", icon: Layers, label: "Flashcards" },
-  { href: "/progress", icon: BarChart3, label: "Progress" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Overview" },
+  { href: "/dashboard/essay", icon: PenLine, label: "Essay Grader" },
+  { href: "/dashboard/reading", icon: BookOpen, label: "Reading" },
+  { href: "/dashboard/mock-exam", icon: Target, label: "Mock Exam" },
+  { href: "/dashboard/flashcards", icon: Layers, label: "Flashcards" },
+  { href: "/dashboard/progress", icon: BarChart3, label: "Progress" },
 ];
 
 export function MobileNav() {
@@ -58,10 +58,7 @@ export function MobileNav() {
               Navigation
             </p>
             {NAV_ITEMS.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/" || pathname === "/dashboard"
-                  : pathname.startsWith(item.href);
+              const isActive = pathname === item.href;
               const Icon = item.icon;
               return (
                 <Link

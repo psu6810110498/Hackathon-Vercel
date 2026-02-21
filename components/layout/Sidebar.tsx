@@ -19,13 +19,13 @@ import {
 import { useState } from "react";
 
 const NAV_ITEMS = [
-  { href: "/", icon: LayoutDashboard, label: "Overview" },
-  { href: "/essay", icon: PenLine, label: "Essay Grader" },
-  { href: "/reading", icon: BookOpen, label: "Reading" },
-  { href: "/exercise", icon: BrainCircuit, label: "Practice" },
-  { href: "/mock-exam", icon: Target, label: "Mock Exam" },
-  { href: "/flashcards", icon: Layers, label: "Flashcards" },
-  { href: "/progress", icon: BarChart3, label: "Progress" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Overview" },
+  { href: "/dashboard/essay", icon: PenLine, label: "Essay Grader" },
+  { href: "/dashboard/reading", icon: BookOpen, label: "Reading" },
+  { href: "/dashboard/exercise", icon: BrainCircuit, label: "Practice" },
+  { href: "/dashboard/mock-exam", icon: Target, label: "Mock Exam" },
+  { href: "/dashboard/flashcards", icon: Layers, label: "Flashcards" },
+  { href: "/dashboard/progress", icon: BarChart3, label: "Progress" },
 ];
 
 const HSK_LEVELS = [4, 5, 6] as const;
@@ -67,10 +67,7 @@ export function Sidebar() {
           </p>
         )}
         {NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/" || pathname === "/dashboard"
-              : pathname.startsWith(item.href);
+          const isActive = pathname === item.href;
           const Icon = item.icon;
 
           return (

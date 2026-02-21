@@ -1,14 +1,26 @@
-/**
- * Seed script — optional initial data
- * Run: npx tsx prisma/seed.ts (after db push)
- */
-
 import { prisma } from "../lib/db/prisma";
+import bcrypt from "bcryptjs";
 
 async function main() {
-  // Example: create a test user if needed
-  // await prisma.user.upsert({ ... });
-  console.log("Seed completed. No default data to insert.");
+  console.log("🌱 Seeding database...");
+
+  const hashedPassword = await bcrypt.hash("password123", 10);
+
+  const testUser = await prisma.user.upsert({
+    where: { email: "test@example.com" },
+    update: {
+      password: hashedPassword,
+      plan: "PREMIUM",
+    },
+    create: {
+      email: "test@example.com",
+      name: "Test User",
+      password: hashedPassword,
+      plan: "PREMIUM",
+    },
+  });
+
+  console.log("✅ Seed completed. Test user created:", testUser.email);
 }
 
 main()
