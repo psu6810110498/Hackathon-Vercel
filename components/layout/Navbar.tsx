@@ -3,7 +3,7 @@ import { auth, signOut } from "@/lib/auth/config";
 import { Command } from "lucide-react";
 
 /**
- * Modern Light Top Navigation
+ * Modern Light Top Navigation — Thai Version
  */
 export async function Navbar() {
   const session = await auth();
@@ -15,7 +15,7 @@ export async function Navbar() {
             <Command size={14} />
           </div>
           <span className="font-semibold text-black tracking-wide">
-            HSK Coach
+            HSK AI Coach
           </span>
         </Link>
         <nav className="flex items-center gap-5">
@@ -25,13 +25,13 @@ export async function Navbar() {
                 href="/dashboard"
                 className="text-[13px] font-medium text-zinc-600 hover:text-black transition-colors"
               >
-                Dashboard
+                แดชบอร์ด
               </Link>
               <Link
                 href="/dashboard/history"
                 className="text-[13px] font-medium text-zinc-600 hover:text-black transition-colors hidden sm:block"
               >
-                History
+                ประวัติ
               </Link>
               <div className="h-4 w-[1px] bg-black/10 mx-2 hidden sm:block" />
               <form
@@ -43,9 +43,9 @@ export async function Navbar() {
               >
                 <button
                   type="submit"
-                  className="text-[13px] font-medium text-zinc-600 hover:text-black transition-colors"
+                  className="text-[13px] font-medium text-rose-500 hover:text-rose-700 transition-colors"
                 >
-                  Log Out
+                  ออกจากระบบ
                 </button>
               </form>
             </>
@@ -55,13 +55,13 @@ export async function Navbar() {
                 href="/login"
                 className="text-[13px] font-medium text-zinc-600 hover:text-black transition-colors"
               >
-                Log In
+                เข้าสู่ระบบ
               </Link>
               <Link
                 href="/register"
                 className="text-[13px] font-medium bg-black text-white px-4 py-1.5 rounded-md hover:bg-zinc-800 transition-colors shadow-sm"
               >
-                Sign Up
+                สมัครสมาชิก
               </Link>
             </>
           )}
