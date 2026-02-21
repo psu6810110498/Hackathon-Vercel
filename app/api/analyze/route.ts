@@ -19,7 +19,9 @@ import {
   calculatePredictedScore,
   updatePredictedScore,
 } from "@/lib/db/queries";
-import { validateEssayInput, isValidHskLevel } from "@/lib/utils/validation";
+import { validateEssayInput, isValidHskLevelForWriting } from "@/lib/utils/validation";
+import { getScoreTotal } from "@/types/analysis";
+import { HSK_CONFIG } from "@/lib/hsk/config";
 import { analyzeWriting } from "@/lib/ai/analyzer";
 
 const MAX_DAILY_USAGE_FREE = 3;
@@ -62,15 +64,23 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!isValidHskLevel(level)) {
+    if (!isValidHskLevelForWriting(level)) {
       return NextResponse.json(
-        { error: "ระดับ HSK ต้องเป็น 4, 5 หรือ 6" },
+        { error: "ระดับ HSK สำหรับการเขียนต้องเป็น 3, 4, 5 หรือ 6" },
         { status: 400 }
       );
     }
 
     const essay = inputCheck.data!;
-    const hskLevel = level as 4 | 5 | 6;
+    const hskLevel = level as 3 | 4 | 5 | 6;
+    const levelKey = `HSK${hskLevel}` as keyof typeof HSK_CONFIG;
+    const minChars = HSK_CONFIG[levelKey].minChars;
+    if (essay.length < minChars) {
+      return NextResponse.json(
+        { error: `สำหรับ HSK ${hskLevel} กรุณาพิมพ์อย่างน้อย ${minChars} ตัวอักษร` },
+        { status: 400 }
+      );
+    }
 
     // 4. Business logic
     const result = await analyzeWriting(essay, hskLevel);
@@ -88,7 +98,7 @@ export async function POST(request: Request) {
       hskLevel,
       inputText: essay,
       result: result as object,
-      score: result.score,
+      score: Math.round(getScoreTotal(result.score)),
     });
     await incrementDailyUsage(userId);
 

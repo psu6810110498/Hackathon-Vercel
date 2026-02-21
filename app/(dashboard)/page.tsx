@@ -11,8 +11,8 @@ import { PassageInput } from "@/components/features/reading/PassageInput";
 import { VocabCard } from "@/components/features/reading/VocabCard";
 import { QuestionCard } from "@/components/features/reading/QuestionCard";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { IWritingAnalysisResult } from "@/types/analysis";
-import type { IReadingAnalysisResult } from "@/types/analysis";
+import { getScoreTotal } from "@/types/analysis";
+import type { IWritingAnalysisResult, IReadingAnalysisResult } from "@/types/analysis";
 import type { AppMode } from "@/components/features/shared/ModeToggle";
 
 /**
@@ -36,7 +36,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleWritingSubmit = async (text: string, hskLevel: 4 | 5 | 6) => {
+  const handleWritingSubmit = async (text: string, hskLevel: 3 | 4 | 5 | 6) => {
     setError("");
     setWritingResult(null);
     setReadingResult(null);
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleReadingSubmit = async (text: string, hskLevel: 4 | 5 | 6) => {
+  const handleReadingSubmit = async (text: string, hskLevel: 1 | 2 | 3 | 4 | 5 | 6) => {
     setError("");
     setWritingResult(null);
     setReadingResult(null);
@@ -108,7 +108,11 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
           {mode === "WRITING" ? (
-            <EssayInput onSubmit={handleWritingSubmit} disabled={loading} />
+            <EssayInput
+              onSubmit={handleWritingSubmit}
+              onSwitchToReading={() => setMode("READING")}
+              disabled={loading}
+            />
           ) : (
             <PassageInput onSubmit={handleReadingSubmit} disabled={loading} />
           )}
@@ -128,12 +132,18 @@ export default function DashboardPage() {
             <>
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4">
-                  <ScoreCircle score={writingResult.score} />
+                  <ScoreCircle score={getScoreTotal(writingResult.score)} />
                   <HSKLevelBadge level={writingResult.level} />
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <p className="text-thai text-sm">{writingResult.summary}</p>
                   <p className="text-thai text-sm text-muted-foreground">{writingResult.feedback}</p>
+                  {writingResult.nativeTip && (
+                    <p className="text-thai text-sm text-amber-800/90">
+                      <span className="font-medium">เคล็ดลับคนไทย: </span>
+                      {writingResult.nativeTip}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
               <div>

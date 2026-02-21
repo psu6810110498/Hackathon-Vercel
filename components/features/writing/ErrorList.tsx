@@ -20,7 +20,7 @@ export function ErrorList({ errors, className }: ErrorListProps) {
   return (
     <ul className={`space-y-3 ${className ?? ""}`}>
       {errors.map((err, i) => (
-        <li key={i}>
+        <li key={err.id ?? i}>
           <ErrorCard error={err} index={i} />
         </li>
       ))}

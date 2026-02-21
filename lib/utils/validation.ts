@@ -6,16 +6,28 @@ const MIN_ESSAY_LENGTH = 50;
 const MAX_ESSAY_LENGTH = 2000;
 const MIN_READING_LENGTH = 100;
 const MAX_READING_LENGTH = 5000;
-const VALID_HSK_LEVELS = [4, 5, 6] as const;
+const VALID_HSK_LEVELS = [1, 2, 3, 4, 5, 6] as const;
+const VALID_HSK_LEVELS_WRITING = [3, 4, 5, 6] as const;
 
 /**
- * Validate HSK level (4, 5, or 6)
+ * Validate HSK level (1–6) for reading or general use
  */
-export function isValidHskLevel(level: unknown): level is 4 | 5 | 6 {
+export function isValidHskLevel(level: unknown): level is 1 | 2 | 3 | 4 | 5 | 6 {
   return (
     typeof level === "number" &&
     Number.isInteger(level) &&
     (VALID_HSK_LEVELS as readonly number[]).includes(level)
+  );
+}
+
+/**
+ * Validate HSK level for writing (3–6 only; 1–2 have no writing)
+ */
+export function isValidHskLevelForWriting(level: unknown): level is 3 | 4 | 5 | 6 {
+  return (
+    typeof level === "number" &&
+    Number.isInteger(level) &&
+    (VALID_HSK_LEVELS_WRITING as readonly number[]).includes(level)
   );
 }
 
@@ -79,4 +91,5 @@ export {
   MIN_READING_LENGTH,
   MAX_READING_LENGTH,
   VALID_HSK_LEVELS,
+  VALID_HSK_LEVELS_WRITING,
 };

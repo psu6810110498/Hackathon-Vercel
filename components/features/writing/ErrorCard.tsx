@@ -38,6 +38,18 @@ export function ErrorCard({ error, index, className }: ErrorCardProps) {
           </span>
         </p>
         <p className="text-thai text-muted-foreground">{error.explanation}</p>
+        {error.thaiMistakeTip && (
+          <p className="text-thai text-amber-800/90">
+            <span className="font-medium">เคล็ดลับคนไทย: </span>
+            {error.thaiMistakeTip}
+          </p>
+        )}
+        {error.hskRule && (
+          <p className="text-xs text-muted-foreground">
+            <span className="font-medium">กฎ HSK: </span>
+            {error.hskRule}
+          </p>
+        )}
       </CardContent>
     </Card>
   );

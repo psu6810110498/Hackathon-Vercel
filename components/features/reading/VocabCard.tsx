@@ -19,6 +19,12 @@ export function VocabCard({ vocab, className }: VocabCardProps) {
           <span className="text-sm text-muted-foreground">{vocab.pinyin}</span>
         </div>
         <p className="mt-1 text-sm">{vocab.meaning}</p>
+        {vocab.thaiTip && (
+          <p className="mt-1 text-sm text-amber-800/90">
+            <span className="font-medium">เคล็ดลับคนไทย: </span>
+            {vocab.thaiTip}
+          </p>
+        )}
         {vocab.example && (
           <p className="mt-2 text-xs italic text-muted-foreground">
             {vocab.example}

@@ -60,13 +60,13 @@ export async function POST(request: Request) {
 
     if (!isValidHskLevel(level)) {
       return NextResponse.json(
-        { error: "ระดับ HSK ต้องเป็น 4, 5 หรือ 6" },
+        { error: "ระดับ HSK ต้องเป็น 1–6" },
         { status: 400 }
       );
     }
 
     const text = inputCheck.data!;
-    const hskLevel = level as 4 | 5 | 6;
+    const hskLevel = level as 1 | 2 | 3 | 4 | 5 | 6;
 
     // 4. Business logic
     const result = await analyzeReading(text, hskLevel);

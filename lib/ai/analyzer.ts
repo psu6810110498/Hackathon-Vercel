@@ -15,6 +15,10 @@ import type {
   IWritingAnalysisResult,
   IReadingAnalysisResult,
   IWritingError,
+  IReadingVocab,
+  IReadingQuestion,
+  IScoreBreakdown,
+  HSKLevel,
 } from "@/types/analysis";
 
 /**
@@ -46,19 +50,29 @@ export async function analyzeWriting(
   const raw = await callClaude(system, user);
   if (!raw) return null;
 
-  const parsed = parseJson<IWritingAnalysisResult>(raw);
-  if (!parsed || typeof parsed.score !== "number" || !Array.isArray(parsed.errors)) {
-    return null;
-  }
+  const parsed = parseJson<Record<string, unknown>>(raw);
+  if (!parsed || !Array.isArray(parsed.errors)) return null;
 
-  // Normalize errors
-  const errors: IWritingError[] = (parsed.errors || []).map((e: unknown) => {
+  const scoreNum =
+    typeof parsed.score === "number"
+      ? parsed.score
+      : parsed.score && typeof parsed.score === "object" && typeof (parsed.score as IScoreBreakdown).total === "number"
+        ? (parsed.score as IScoreBreakdown).total
+        : 0;
+  const level = (parsed.level as HSKLevel) ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : hskLevel === 4 ? "HSK4" : hskLevel === 3 ? "HSK3" : "HSK4");
+
+  const errors: IWritingError[] = (parsed.errors as unknown[] || []).map((e: unknown, i: number) => {
     const x = e as Record<string, unknown>;
     return {
+      id: typeof x?.id === "string" ? x.id : `err-${i}`,
       type: String(x?.type ?? "อื่นๆ"),
+      category: x?.category as IWritingError["category"],
+      severity: x?.severity as IWritingError["severity"],
       original: String(x?.original ?? ""),
       suggestion: String(x?.suggestion ?? ""),
       explanation: String(x?.explanation ?? ""),
+      thaiMistakeTip: x?.thaiMistakeTip != null ? String(x.thaiMistakeTip) : undefined,
+      hskRule: x?.hskRule != null ? String(x.hskRule) : undefined,
       position:
         x?.position && typeof x.position === "object"
           ? (x.position as { start: number; end: number })
@@ -66,13 +80,16 @@ export async function analyzeWriting(
     };
   });
 
-  return {
-    score: Math.min(100, Math.max(0, Math.round(parsed.score))),
-    level: parsed.level ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : "HSK4"),
+  const result: IWritingAnalysisResult = {
+    level,
+    score: Math.min(100, Math.max(0, Math.round(scoreNum))),
     errors,
+    exercises: Array.isArray(parsed.exercises) ? (parsed.exercises as IWritingAnalysisResult["exercises"]) : undefined,
     summary: String(parsed.summary ?? ""),
     feedback: String(parsed.feedback ?? ""),
+    nativeTip: parsed.nativeTip != null ? String(parsed.nativeTip) : undefined,
   };
+  return result;
 }
 
 /**
@@ -92,26 +109,36 @@ export async function analyzeReading(
     return null;
   }
 
+  const level = (parsed.level as HSKLevel) ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : hskLevel === 4 ? "HSK4" : hskLevel === 3 ? "HSK3" : "HSK4");
+
+  const vocabulary: IReadingVocab[] = (parsed.vocabulary || []).map((v: unknown) => {
+    const x = v as Record<string, unknown>;
+    return {
+      word: String(x?.word ?? ""),
+      pinyin: String(x?.pinyin ?? ""),
+      meaning: String(x?.meaning ?? ""),
+      thaiTip: x?.thaiTip != null ? String(x.thaiTip) : undefined,
+      example: x?.example != null ? String(x.example) : undefined,
+      hskLevel: x?.hskLevel != null ? Number(x.hskLevel) : undefined,
+    };
+  });
+
+  const questions: IReadingQuestion[] = (parsed.questions || []).map((q: unknown, i: number) => {
+    const y = q as Record<string, unknown>;
+    return {
+      id: typeof y?.id === "string" ? y.id : `q-${i}`,
+      question: String(y?.question ?? ""),
+      options: Array.isArray(y?.options) ? (y.options as string[]) : [],
+      correctIndex: Number(y?.correctIndex ?? 0),
+      explanation: String(y?.explanation ?? ""),
+    };
+  });
+
   return {
-    level: parsed.level ?? (hskLevel === 6 ? "HSK6" : hskLevel === 5 ? "HSK5" : "HSK4"),
-    vocabulary: (parsed.vocabulary || []).map((v: unknown) => {
-      const x = v as Record<string, unknown>;
-      return {
-        word: String(x?.word ?? ""),
-        pinyin: String(x?.pinyin ?? ""),
-        meaning: String(x?.meaning ?? ""),
-        example: x?.example != null ? String(x.example) : undefined,
-      };
-    }),
-    questions: (parsed.questions || []).map((q: unknown) => {
-      const y = q as Record<string, unknown>;
-      return {
-        question: String(y?.question ?? ""),
-        options: Array.isArray(y?.options) ? (y.options as string[]) : [],
-        correctIndex: Number(y?.correctIndex ?? 0),
-        explanation: String(y?.explanation ?? ""),
-      };
-    }),
+    level,
+    vocabulary,
+    questions,
+    difficultWords: Array.isArray(parsed.difficultWords) ? (parsed.difficultWords as IReadingAnalysisResult["difficultWords"]) : undefined,
     summary: String(parsed.summary ?? ""),
   };
 }

@@ -5,14 +5,25 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 import { MIN_READING_LENGTH, MAX_READING_LENGTH } from "@/lib/utils/validation";
 
+type HskLevelNum = 1 | 2 | 3 | 4 | 5 | 6;
+
+const LEVEL_OPTIONS: { value: HskLevelNum; label: string }[] = [
+  { value: 1, label: "HSK 1" },
+  { value: 2, label: "HSK 2" },
+  { value: 3, label: "HSK 3" },
+  { value: 4, label: "HSK 4" },
+  { value: 5, label: "HSK 5" },
+  { value: 6, label: "HSK 6" },
+];
+
 export interface PassageInputProps {
-  onSubmit: (text: string, level: 4 | 5 | 6) => void;
+  onSubmit: (text: string, level: HskLevelNum) => void;
   disabled?: boolean;
   className?: string;
 }
 
 /**
- * Reading passage input + HSK level + submit
+ * Reading passage input + HSK level + submit (HSK 1–6)
  */
 export function PassageInput({
   onSubmit,
@@ -20,7 +31,7 @@ export function PassageInput({
   className,
 }: PassageInputProps) {
   const [text, setText] = useState("");
-  const [level, setLevel] = useState<4 | 5 | 6>(5);
+  const [level, setLevel] = useState<HskLevelNum>(5);
   const length = text.trim().length;
   const valid = length >= MIN_READING_LENGTH && length <= MAX_READING_LENGTH;
 
@@ -40,12 +51,14 @@ export function PassageInput({
         <label className="mb-2 block text-sm font-medium">ระดับ HSK</label>
         <select
           value={level}
-          onChange={(e) => setLevel(Number(e.target.value) as 4 | 5 | 6)}
+          onChange={(e) => setLevel(Number(e.target.value) as HskLevelNum)}
           className="h-10 rounded-lg border border-border bg-surface-card px-3 py-2 text-sm text-foreground focus:border-primary focus:shadow-input outline-none transition-all"
         >
-          <option value={4}>HSK 4</option>
-          <option value={5}>HSK 5</option>
-          <option value={6}>HSK 6</option>
+          {LEVEL_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
       <div>

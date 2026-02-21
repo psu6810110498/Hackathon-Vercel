@@ -34,7 +34,7 @@ export default async function HistoryPage() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between py-4">
                   <div className="flex items-center gap-2">
-                    <HSKLevelBadge level={a.hskLevel as 4 | 5 | 6} />
+                    <HSKLevelBadge level={a.hskLevel as 1 | 2 | 3 | 4 | 5 | 6} />
                     <span className="text-sm text-muted-foreground">
                       {a.mode === "WRITING" ? "การเขียน" : "การอ่าน"}
                     </span>

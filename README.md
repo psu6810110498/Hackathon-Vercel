@@ -52,6 +52,7 @@ npm run dev
 
 - [SETUP.md](docs/SETUP.md) — การติดตั้งและรัน
 - [BEFORE-BUILD.md](docs/BEFORE-BUILD.md) — เช็คก่อน Build (DB + Claude + DeepSeek)
+- [TEAM.md](docs/TEAM.md) — แผนแบ่งงาน (คุณ + เพื่อน)
 - [CONTRIBUTING.md](docs/CONTRIBUTING.md) — แนวทางสำหรับทีม (ก่อน push)
 - [PRE-PUSH-CHECKLIST.md](docs/PRE-PUSH-CHECKLIST.md) — เช็คลิสต์ก่อน push
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md) — สถาปัตยกรรมและ data flow
