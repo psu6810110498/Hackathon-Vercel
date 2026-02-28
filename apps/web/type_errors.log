@@ -1,0 +1,47 @@
+
+> @hsk/web@1.0.0 type-check /Users/aphchat/Coding Year 1/VERCEL HACKATHON/apps/web
+> tsc --noEmit
+
+app/(auth)/login/page.tsx(7,28): error TS6305: Output file '/Users/aphchat/Coding Year 1/VERCEL HACKATHON/packages/shared/dist/index.d.ts' has not been built from source file '/Users/aphchat/Coding Year 1/VERCEL HACKATHON/packages/shared/src/index.ts'.
+app/(auth)/register/actions.ts(3,24): error TS2307: Cannot find module '@/lib/db/prisma' or its corresponding type declarations.
+app/(auth)/register/page.tsx(7,31): error TS6305: Output file '/Users/aphchat/Coding Year 1/VERCEL HACKATHON/packages/shared/dist/index.d.ts' has not been built from source file '/Users/aphchat/Coding Year 1/VERCEL HACKATHON/packages/shared/src/index.ts'.
+app/(marketing)/page.tsx(2,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/analyze/route.ts(12,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/analyze/route.ts(21,8): error TS2307: Cannot find module '@/lib/db/queries' or its corresponding type declarations.
+app/api/analyze/route.ts(25,32): error TS2307: Cannot find module '@/lib/ai/analyzer' or its corresponding type declarations.
+app/api/analyze/route.ts(117,26): error TS7006: Parameter 'e' implicitly has an 'any' type.
+app/api/auth/[...nextauth]/route.ts(5,26): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/exercise/route.ts(12,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/exercise/route.ts(16,8): error TS2307: Cannot find module '@/lib/db/queries' or its corresponding type declarations.
+app/api/exercise/route.ts(17,35): error TS2307: Cannot find module '@/lib/ai/analyzer' or its corresponding type declarations.
+app/api/exercise/route.ts(18,24): error TS2307: Cannot find module '@/lib/db/prisma' or its corresponding type declarations.
+app/api/exercise/route.ts(73,35): error TS7006: Parameter 'l' implicitly has an 'any' type.
+app/api/reading/route.ts(12,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/reading/route.ts(17,8): error TS2307: Cannot find module '@/lib/db/queries' or its corresponding type declarations.
+app/api/reading/route.ts(19,32): error TS2307: Cannot find module '@/lib/ai/analyzer' or its corresponding type declarations.
+app/api/usage/route.ts(6,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/api/usage/route.ts(11,8): error TS2307: Cannot find module '@/lib/db/queries' or its corresponding type declarations.
+app/dashboard/mock-exam/page.tsx(2,24): error TS2307: Cannot find module '@/lib/hsk/exams/h51327' or its corresponding type declarations.
+app/dashboard/profile/page.tsx(1,22): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+app/dashboard/profile/page.tsx(2,29): error TS2307: Cannot find module '@/lib/db/queries' or its corresponding type declarations.
+components/features/mock-exam/MockExamPlayer.tsx(20,39): error TS2307: Cannot find module '@/lib/hsk/types' or its corresponding type declarations.
+components/features/mock-exam/MockExamPlayer.tsx(69,29): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(69,34): error TS7006: Parameter 's' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(118,40): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(118,45): error TS7006: Parameter 's' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(157,28): error TS7006: Parameter 'section' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(158,34): error TS7006: Parameter 'q' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(290,35): error TS7006: Parameter 'section' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(290,44): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(422,46): error TS7006: Parameter 'q' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(422,49): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(437,40): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(437,45): error TS7006: Parameter 'oIdx' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(467,42): error TS7006: Parameter 'word' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(467,48): error TS7006: Parameter 'wIdx' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(541,35): error TS7006: Parameter 'section' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(541,44): error TS7006: Parameter 'sIdx' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(548,28): error TS7006: Parameter 'q' implicitly has an 'any' type.
+components/features/mock-exam/MockExamPlayer.tsx(555,45): error TS7006: Parameter 'q' implicitly has an 'any' type.
+components/layout/Navbar.tsx(2,31): error TS2307: Cannot find module '@/lib/auth/config' or its corresponding type declarations.
+ ELIFECYCLE  Command failed with exit code 1.

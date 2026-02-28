@@ -1,13 +1,14 @@
-<p align="center">
+<div align="center">
   <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Turborepo-8A2BE2?style=for-the-badge&logo=turborepo" alt="Turborepo" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Prisma-5.22-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss" alt="Tailwind" />
   <img src="https://img.shields.io/badge/Claude_3.5-AI-8B5CF6?style=for-the-badge&logo=anthropic" alt="Claude" />
   <img src="https://img.shields.io/badge/DeepSeek-AI-00A67E?style=for-the-badge" alt="DeepSeek" />
-</p>
+</div>
 
-<h1 align="center">🇨🇳 HSK AI Coach</h1>
+<h1 align="center">🇨🇳 HSK AI Coach — Enterprise Edition</h1>
 
 <p align="center">
   <strong>Enterprise-Grade Chinese Language Intelligence Platform</strong><br/>
@@ -15,311 +16,127 @@
 </p>
 
 <p align="center">
+  <a href="#-architecture">Architecture</a> •
   <a href="#-features">Features</a> •
-  <a href="#-ai-architecture">AI Architecture</a> •
+  <a href="#-security--compliance">Security</a> •
   <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-project-structure">Project Structure</a> •
-  <a href="#-team">Team</a>
+  <a href="#-development">Development</a>
 </p>
 
 ---
 
-## 🎯 Problem Statement
+## 🏗️ Architecture: Enterprise Monorepo
 
-Thai learners preparing for HSK exams (Hanyu Shuiping Kaoshi — 汉语水平考试) face unique challenges: direct translation patterns, tonal confusion, and a lack of AI tools that understand **Thai-specific error patterns**. Existing tools provide generic feedback that fails to address the root causes of mistakes made by Thai speakers.
+We have migrated to a **Turborepo** monorepo architecture for extreme scalability, strict separation of concerns, and guaranteed type parity between the Frontend and Backend.
 
-## 💡 Solution
-
-**HSK AI Coach** is an intelligent, full-stack platform that leverages a **Dual-Model AI Pipeline** (Claude 3.5 Sonnet + DeepSeek) to deliver personalized, pedagogical feedback specifically tailored for Thai learners. Every analysis understands the common pitfalls Thai speakers encounter when writing and reading Chinese.
-
----
-
-## ✨ Features
-
-### 📊 Dashboard — Command Center
-
-| Feature              | Description                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| HSK Readiness Score  | Real-time prediction of exam readiness based on all activity |
-| Daily Usage Tracking | Smart quota management (Free: 3/day, Premium: unlimited)     |
-| Top Error Detection  | Identifies your weakest area for focused improvement         |
-| Activity Timeline    | Track all analyses with scores and timestamps                |
-
-### ✍️ Essay Writing Analyzer
-
-- **4-Dimensional Scoring** — Grammar, Vocabulary, Coherence, Native Naturalness (0–100)
-- **Character-Level Error Mapping** — Pinpoints exact errors with severity levels
-- **AI Rewrite** — Generates a natural, native-sounding version for learning
-- **Hanzi Highlighting** — Visual annotation of problematic characters
-
-### 📖 Reading Intelligence
-
-- **Auto-Summary** — Converts complex Chinese articles into Thai summaries instantly
-- **Comprehension Questions** — AI-generated test questions with answer validation
-- **Thai Confusion Guard** — Highlights words commonly mistranslated by Thai speakers
-- **Smart Vocabulary Extraction** — Key words with pinyin, HSK level, and memory tips
-
-### 🧠 AI Exercise Generator
-
-- **Weakness-Driven** — Generates exercises based on your personal error history
-- **Multiple Choice Format** — Instant answer checking with explanations
-- **HSK 3–6 Coverage** — Exercises calibrated to each proficiency level
-
-### 📝 Mock Exam Simulator
-
-- **Full HSK 5 Exam** — Complete exam simulation (H51327) with all sections
-- **Real-Time Scoring** — Instant feedback as you progress through the exam
-- **Listening + Reading + Writing** — Covers all exam components
-
-### 🃏 Flashcard System (SRS)
-
-- **Spaced Repetition** — Scientifically-proven memorization algorithm (ts-fsrs)
-- **HSK 3.0 Vocabulary** — Based on the latest 2021/2025 HSK standard
-- **Progress Tracking** — Visual mastery indicators for each word
-
-### 📈 Additional Features
-
-- **History** — Complete archive of all past analyses (up to 50 entries)
-- **Profile & Subscription** — Account management with Premium upgrade path (฿199/mo)
-- **Progress Tracking** — Coming soon: multi-dimensional skill tracking with trend charts
-
----
-
-## 🧬 AI Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    User Input (Chinese Text)            │
-└──────────────────────────┬──────────────────────────────┘
-                           │
-              ┌────────────▼────────────┐
-              │   Dual-Model Pipeline   │
-              └────────────┬────────────┘
-                           │
-           ┌───────────────┼───────────────┐
-           │                               │
-  ┌────────▼────────┐           ┌──────────▼──────────┐
-  │    DeepSeek      │           │    Claude 3.5       │
-  │  Linguistic      │           │    Pedagogical      │
-  │  Layer           │           │    Layer             │
-  ├──────────────────┤           ├─────────────────────┤
-  │ • Grammar Parse  │──────────▶│ • Thai Explanation  │
-  │ • Word Choice    │           │ • 4D Scoring        │
-  │ • Error Detection│           │ • AI Rewrite        │
-  │ • Structure      │           │ • Fix Priorities    │
-  └──────────────────┘           └──────────┬──────────┘
-                                            │
-                              ┌─────────────▼──────────┐
-                              │  Structured JSON Output │
-                              │  + Error Log (Prisma)   │
-                              └────────────────────────┘
+```bash
+📦 HSK AI Coach Monorepo
+ ┣ 📂 apps/
+ ┃ ┣ 📂 web/         # 🖥️ Next.js Frontend (App Router, UI, Server Actions)
+ ┃ ┗ 📂 api/         # ⚙️ Dedicated Backend API & Microservices (Hono / Prisma)
+ ┣ 📂 packages/
+ ┃ ┗ 📂 shared/      # 🔗 Single Source of Truth (Zod Schemas, Types, DTOs)
+ ┗ 📂 docs/          # 📚 Technical Documentation & Roadmaps
 ```
 
-**Why Dual-Model?**
+**Benefits of this Architecture:**
 
-- **DeepSeek** excels at deep linguistic parsing (grammar rules, word usage patterns)
-- **Claude 3.5** excels at pedagogical explanation in Thai with cultural context
-
----
-
-## 🛠️ Tech Stack
-
-### 🖥️ Frontend
-
-| Technology                  | Purpose                                             |
-| --------------------------- | --------------------------------------------------- |
-| **Next.js 14** (App Router) | Framework หลัก — Server Components + Server Actions |
-| **React 18**                | UI Library — component-based rendering              |
-| **TypeScript 5.6** (strict) | Type safety ทั้ง frontend + backend                 |
-| **Tailwind CSS 3.4**        | Styling — utility-first CSS framework               |
-| **shadcn/ui**               | Reusable UI components (Button, Card, Dialog, etc.) |
-| **Lucide React**            | Modern icon library                                 |
-| **Sarabun** (Google Fonts)  | Thai typography                                     |
-
-### 🔧 Backend Logic
-
-| Technology             | Purpose                                                  |
-| ---------------------- | -------------------------------------------------------- |
-| **Next.js API Routes** | REST API (`/api/essay`, `/api/reading`, `/api/exercise`) |
-| **Server Actions**     | Server-side form handling (register, login, signOut)     |
-| **NextAuth.js v5**     | Authentication — Google OAuth + Email/Password           |
-| **bcryptjs**           | Secure password hashing                                  |
-| **Zod**                | Runtime schema validation for form inputs                |
-
-### 🗄️ Database
-
-| Technology                | Purpose                                                |
-| ------------------------- | ------------------------------------------------------ |
-| **Supabase** (PostgreSQL) | Managed cloud database with connection pooling         |
-| **Prisma 5**              | Type-safe ORM — queries, migrations, schema management |
-
-### 🤖 AI Pipeline (Dual-Model)
-
-| Technology                        | Purpose                                                          |
-| --------------------------------- | ---------------------------------------------------------------- |
-| **Claude 3.5 Sonnet** (Anthropic) | Pedagogical Layer — 4D scoring, Thai explanations, AI rewrite    |
-| **DeepSeek API**                  | Linguistic Layer — Grammar parsing, word choice, error detection |
-| **Demo Mode**                     | Mock data fallback when API credits are unavailable              |
-
-### 📚 Data & Algorithm
-
-| Technology              | Purpose                                                     |
-| ----------------------- | ----------------------------------------------------------- |
-| **HSK 3.0** (2021/2025) | Vocabulary database — 11,092 words across 7-9 levels (JSON) |
-| **ts-fsrs**             | Spaced Repetition System algorithm for flashcards           |
-| **pinyin**              | Chinese character → Pinyin romanization converter           |
-
-### 🚀 Deployment
-
-| Technology                  | Purpose                                                             |
-| --------------------------- | ------------------------------------------------------------------- |
-| **Vercel**                  | Production hosting with edge optimization + auto-deploy from GitHub |
-| **Cloudflare Quick Tunnel** | Local demo tunnel for hackathon presentation                        |
+- **Zero Type Drift:** End-to-end type safety from DB Schema ➡️ API Response ➡️ Frontend UI via `packages/shared`.
+- **Independent Scaling:** The AI processing backend (`apps/api`) can scale independently of the frontend web application (`apps/web`).
+- **Code Portability:** Shared validations and UI logic can easily be reused if a Mobile App (React Native) is developed in the future.
 
 ---
 
-## 📥 Quick Start
+## ✨ Enterprise Features Breakdown
+
+### ✍️ AI Writing Analysis (4-Dimension Scoring)
+
+- **Deep Linguistic Parse:** Evaluates Grammar, Vocabulary, Coherence, and Native Naturalness on a strict 0-100 scale.
+- **Hanzi Highlighting:** Pinpoints the exact problematic Chinese character and severity level.
+- **Thai-Context Explanations:** Claude 3.5 provides native Thai explanations of _why_ the grammar is wrong (addressing direct-translation habits).
+
+### 📝 Mock Exam Simulator & Flashcard System
+
+- **Real HSK 5 Simulation:** Full test coverage (H51327) encompassing Listening, Reading, and Writing.
+- **Spaced Repetition System (SRS):** Powered by the `ts-fsrs` algorithm to ensure long-term retention of HSK 3.0 vocabulary.
+
+### 📊 Comprehensive Audit & Tracking
+
+- **History Tracking:** Archives all past AI analyses, allowing users to track skill progression.
+- **Enterprise Dashboard:** Command center predicting exam readiness and tracking daily usage limits.
+
+---
+
+## 🛡️ Security & Compliance Measures
+
+Our infrastructure implements strict security boundaries and enterprise-grade validation:
+
+1. **Strict Password Policies (Zero Trust Principle)**
+   - Passwords must be 6+ characters, containing at least 1 uppercase letter and 1 special character (Regex Enforced).
+   - Validation occurs across both the client (UI feedback) and server (API Rejection) simultaneously using the shared Zod schema.
+2. **Real-time Inline Validation & Strength Meter**
+   - Active password strength indicators and real-time checklist during registration.
+   - `Confirm Password` exact-match validation preventing user input errors.
+3. **Robust Data Validation (Zod)**
+   - All incoming API requests are stripped of arbitrary data and strongly validated using `packages/shared` Zod Schemas before touching the AI or Database.
+4. **Role-Based Access Control (RBAC)**
+   - Secure server-side middleware enforcing authorization roles (`ADMIN`, `TEACHER`, `MEMBER`), effectively gatekeeping sensitive management endpoints.
+
+---
+
+## 🛠️ Tech Stack Mastery
+
+| Layer                 | Technology                    | Purpose                                                                               |
+| :-------------------- | :---------------------------- | :------------------------------------------------------------------------------------ |
+| **Frontend Platform** | **Next.js 14** (App Router)   | High-performance React framework leveraging Server Components.                        |
+| **Styling & UI**      | **Tailwind CSS + shadcn/ui**  | Utility-first styling combined with accessible, highly-customizable components.       |
+| **Backend Services**  | **Next.js API Routes / Hono** | High-throughput data processing and AI orchestration layer.                           |
+| **Database & ORM**    | **PostgreSQL + Prisma 5**     | Fully typed relational database access and robust migration strategies.               |
+| **Authentication**    | **NextAuth.js v5 + bcrypt**   | Secure session management with encrypted password storage.                            |
+| **AI Intelligence**   | **Claude 3.5 + DeepSeek API** | Dual-Model pipeline separating Pedagogical explanations from Deep Linguistic parsing. |
+| **Type Safety**       | **TypeScript 5.6 + Zod**      | End-to-end static typing and runtime input validation.                                |
+
+---
+
+## 📥 Development Workflow & Quick Start
 
 ### Prerequisites
 
 - **Node.js** ≥ 18.x
-- **npm** ≥ 9.x
-- **PostgreSQL** database (or [Supabase](https://supabase.com) free tier)
+- **pnpm** ≥ 9.x (Required for Monorepo workspaces)
+- **PostgreSQL** Local Database
 
-### Installation
+### Local Setup
 
 ```bash
-# 1. Clone the repository
+# 1. Clone & Install Core Dependencies
 git clone https://github.com/psu6810110498/Hackathon-Vercel.git
 cd Hackathon-Vercel
+pnpm install
 
-# 2. Install dependencies
-npm install
-
-# 3. Set up environment variables
+# 2. Duplicate Env File & Supply Credentials
 cp .env.example .env
-# Fill in: DATABASE_URL, AUTH_SECRET, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY
 
-# 4. Generate Prisma client & push schema
-npx prisma generate
-npm run db:push
+# 3. Synchronize Database & Generate Types
+cd apps/api
+pnpm prisma db push
 
-# 5. Start development server
-npm run dev
+# 4. Boot Entire Monorepo
+pnpm run dev
 ```
 
-Open **[http://localhost:3000](http://localhost:3000)** in your browser.
+### Git Workflow & Pull Request (PR) Policy
 
-### Environment Variables
+Direct commits to `main` are strictly forbidden. All features must:
 
-| Variable             | Description                        | Required |
-| -------------------- | ---------------------------------- | -------- |
-| `DATABASE_URL`       | PostgreSQL connection string       | ✅       |
-| `DIRECT_URL`         | Direct database URL (Supabase)     | ✅       |
-| `AUTH_SECRET`        | NextAuth.js session encryption key | ✅       |
-| `AUTH_GOOGLE_ID`     | Google OAuth Client ID             | Optional |
-| `AUTH_GOOGLE_SECRET` | Google OAuth Client Secret         | Optional |
-| `ANTHROPIC_API_KEY`  | Claude 3.5 Sonnet API key          | ✅       |
-| `DEEPSEEK_API_KEY`   | DeepSeek API key                   | ✅       |
-| `DEMO_MODE`          | Set to `true` for mock AI data     | Optional |
-
----
-
-## 📁 Project Structure
-
-```
-Hackathon-Vercel/
-├── app/
-│   ├── (auth)/              # Login & Registration pages
-│   ├── (marketing)/         # Landing page
-│   ├── api/                 # API routes (essay, reading, exercise, auth)
-│   └── dashboard/           # All dashboard pages
-│       ├── page.tsx          #   ├── Overview (Command Center)
-│       ├── essay/            #   ├── Essay Writing Analyzer
-│       ├── reading/          #   ├── Reading Intelligence
-│       ├── exercise/         #   ├── AI Exercise Generator
-│       ├── mock-exam/        #   ├── Mock Exam Simulator
-│       ├── flashcards/       #   ├── Flashcard SRS System
-│       ├── history/          #   ├── Analysis History
-│       ├── profile/          #   ├── User Profile & Subscription
-│       └── progress/         #   └── Progress Tracking (Coming Soon)
-├── components/
-│   ├── features/            # Feature-specific components
-│   ├── layout/              # Sidebar, MobileNav, TopBar
-│   ├── providers/           # Session & Theme providers
-│   └── ui/                  # Reusable UI primitives (shadcn)
-├── lib/
-│   ├── ai/                  # AI pipeline (Claude + DeepSeek)
-│   ├── auth/                # NextAuth configuration
-│   ├── db/                  # Prisma client & queries
-│   ├── hsk/                 # HSK 3.0 vocabulary & exam data
-│   └── utils/               # Utility functions (cn, format, etc.)
-├── prisma/
-│   └── schema.prisma        # Database schema
-├── types/                   # TypeScript type definitions
-├── vercel.json              # Vercel deployment configuration
-└── package.json
-```
-
----
-
-## 🧪 Available Scripts
-
-| Script      | Command               | Description               |
-| ----------- | --------------------- | ------------------------- |
-| Dev Server  | `npm run dev`         | Start Next.js dev server  |
-| Build       | `npm run build`       | Production build          |
-| Lint        | `npm run lint`        | ESLint code quality check |
-| DB Generate | `npm run db:generate` | Generate Prisma client    |
-| DB Push     | `npm run db:push`     | Push schema to database   |
-| DB Migrate  | `npm run db:migrate`  | Run database migrations   |
-| DB Studio   | `npm run db:studio`   | Open Prisma Studio GUI    |
-
----
-
-## 🔐 Authentication
-
-HSK AI Coach supports two authentication methods:
-
-1. **Google OAuth** — One-click sign in with Google account
-2. **Email/Password** — Traditional registration with bcrypt hashing
-
-Session management is handled by **NextAuth.js v5** with JWT strategy and Prisma adapter.
-
----
-
-## 🏗️ Deployment
-
-### Vercel (Recommended)
-
-1. Push code to GitHub
-2. Import project in [Vercel Dashboard](https://vercel.com)
-3. Add all environment variables
-4. Deploy — Vercel auto-detects Next.js
-
-### Cloudflare Quick Tunnel (Demo)
-
-```bash
-# macOS
-brew install cloudflare/cloudflare/cloudflared
-cloudflared tunnel --url http://localhost:3000
-```
-
----
-
-## 👥 Team
-
-**PSU Hackathon 2026** — Prince of Songkla University
+1. Reside in a designated `feat/`, `fix/`, or `refactor/` branch.
+2. Undergo stringent build testing (`pnpm build`) and linting.
+3. Include long-form commit messages detailing **What**, **Why**, and **Technical implementation**.
+4. Be evaluated through a verified GitHub Pull Request.
 
 ---
 
 <p align="center">
-  <strong>Built with ❤️ for Thai learners of Chinese</strong><br/>
-  <sub>Hackathon Submission — February 2026</sub>
-</p>
-
-<p align="center">
-  <strong>License</strong>: Private / Hackathon Use<br/>
-  Copyright © 2026 HSK AI Coach. All rights reserved.
+  <strong>Built with ❤️ for Enterprise Education</strong><br/>
+  <sub>Prince of Songkla University — 2026</sub>
 </p>

@@ -3,49 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "vocab:refresh": "node scripts/refresh-hsk-vocabulary.js",
-    "test:apis": "tsx scripts/test-apis.ts"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1",
-    "@auth/prisma-adapter": "^2.7.2",
-    "@prisma/client": "^5.22.0",
-    "bcryptjs": "^3.0.3",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.460.0",
-    "next": "14.2.18",
-    "next-auth": "^5.0.0-beta.25",
-    "pinyin": "^4.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7",
-    "ts-fsrs": "^5.2.3",
-    "zod": "^4.3.6"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "dev:web": "turbo dev --filter=@hsk/web",
+    "dev:api": "turbo dev --filter=@hsk/api",
+    "db:generate": "pnpm --filter @hsk/api db:generate",
+    "db:push": "pnpm --filter @hsk/api db:push",
+    "db:migrate": "pnpm --filter @hsk/api db:migrate",
+    "db:studio": "pnpm --filter @hsk/api db:studio"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^22.9.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "autoprefixer": "^10.4.20",
-    "dotenv": "^17.3.1",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.18",
-    "postcss": "^8.4.49",
-    "prisma": "^5.22.0",
-    "tailwindcss": "^3.4.15",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
-  }
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.15.0"
 }

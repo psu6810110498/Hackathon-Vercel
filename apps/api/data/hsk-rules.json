@@ -1,0 +1,30 @@
+[
+  {
+    "level": 4,
+    "category": "grammar",
+    "rule": "把字句",
+    "description": "การใช้ 把 เพื่อย้าย object มาก่อน verb",
+    "example": "我把书放在桌子上。"
+  },
+  {
+    "level": 4,
+    "category": "grammar",
+    "rule": "被字句",
+    "description": " passive voice ด้วย 被",
+    "example": "书被他拿走了。"
+  },
+  {
+    "level": 5,
+    "category": "grammar",
+    "rule": "连...都/也",
+    "description": "แม้แต่...ก็ (เน้น)",
+    "example": "连小孩子都知道。"
+  },
+  {
+    "level": 6,
+    "category": "grammar",
+    "rule": "书面语",
+    "description": "รูปแบบภาษาเขียนที่ซับซ้อน",
+    "example": "鉴于上述情况..."
+  }
+]

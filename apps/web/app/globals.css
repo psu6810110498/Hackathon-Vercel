@@ -1,0 +1,188 @@
+/* ═══════════════════════════════════════
+   HSK AI Coach — "Modern Light" Design System
+   Sleek, high-contrast light mode (Linear/Vercel inspired)
+   ═══════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;500;700&display=swap");
+
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F5F3EE; /* Warm White Base */
+    --foreground: #1c1c22;
+    
+    --card: #FFFFFF;
+    --card-foreground: #1c1c22;
+    
+    --popover: #FFFFFF;
+    --popover-foreground: #1c1c22;
+    
+    --primary: #C8372D; /* Classical Red */
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #EBE8E0;
+    --secondary-foreground: #1c1c22;
+    
+    --muted: #EBE8E0;
+    --muted-foreground: #737373;
+    
+    --accent: #C9973A; /* Classical Gold */
+    --accent-foreground: #FFFFFF;
+    
+    --destructive: #EF4444;
+    --destructive-foreground: #FAFAFA;
+    
+    --border: #E5E2DC;
+    --input: #E5E2DC;
+    --ring: #C8372D;
+    
+    --radius: 0.75rem;
+  }
+  
+  .dark {
+    --background: #080810; /* Dark Base */
+    --foreground: #EDEDEF;
+    
+    --card: #12121A;
+    --card-foreground: #EDEDEF;
+    
+    --popover: #12121A;
+    --popover-foreground: #EDEDEF;
+    
+    --primary: #C8372D; /* Classical Red */
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #1F1F2E;
+    --secondary-foreground: #EDEDEF;
+    
+    --muted: #1F1F2E;
+    --muted-foreground: #A1A1AA;
+    
+    --accent: #C9973A; /* Classical Gold */
+    --accent-foreground: #FFFFFF;
+    
+    --destructive: #EF4444;
+    --destructive-foreground: #FAFAFA;
+    
+    --border: #27273A;
+    --input: #27273A;
+    --ring: #C8372D;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-attachment: fixed;
+  }
+  
+  ::selection {
+    background-color: rgb(200 55 45 / 0.2);
+    color: var(--primary);
+  }
+}
+
+@layer utilities {
+  .ambient-character {
+    @apply fixed text-[40vw] font-bold text-foreground opacity-[0.03] dark:opacity-[0.02] pointer-events-none select-none z-[-1] leading-none;
+  }
+
+  /* Ultra-modern panel styles */
+  .modern-panel {
+    @apply bg-white border border-black/5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05),0_4px_16px_-4px_rgba(0,0,0,0.02)];
+  }
+  
+  .bento-card {
+    @apply bg-white border border-black/[0.08] rounded-2xl overflow-hidden transition-all duration-300 hover:border-black/15 shadow-sm hover:shadow-md;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-zinc-900 to-zinc-500;
+  }
+  
+  .text-gradient-brand {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600;
+  }
+  
+  .text-hanzi {
+    font-family: "Noto Serif TC", "Noto Sans SC", serif;
+  }
+
+  .text-thai {
+    font-family: "Noto Sans Thai", sans-serif;
+  }
+
+  /* Senior Smooth Animations */
+  .page-enter {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .reveal-1 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+  .reveal-2 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+  .reveal-3 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+  .reveal-4 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+  .reveal-5 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+  .reveal-6 { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* 3D Transform Utilities for Flashcards */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  /* Custom Scrollbar for light theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E4E4E7;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #D4D4D8;
+  }
+}
+
+/* Severity Colors for Light Mode */
+.severity-minor {
+  @apply text-yellow-700 bg-yellow-50 border border-yellow-200 px-2.5 py-0.5 rounded-md text-[10px] font-semibold tracking-wider uppercase;
+}
+.severity-important {
+  @apply text-orange-700 bg-orange-50 border border-orange-200 px-2.5 py-0.5 rounded-md text-[10px] font-semibold tracking-wider uppercase;
+}
+.severity-must-fix {
+  @apply text-red-700 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md text-[10px] font-semibold tracking-wider uppercase;
+}
