@@ -134,17 +134,6 @@ Direct commits to `main` are strictly forbidden. All features must:
 3. Include long-form commit messages detailing **What**, **Why**, and **Technical implementation**.
 4. Be evaluated through a verified GitHub Pull Request.
 
----
-
-## 👨‍💻 Contributors
-
-- **[psu6810110498](https://github.com/psu6810110498)** - Lead Developer / Architect
-- **[psu6810110402](https://github.com/psu6810110402)** - Visionary / Product Ideation
-
-_(We welcome contributions! If you'd like to be added, please submit a Pull Request.)_
-
----
-
 <p align="center">
   <strong>Built with ❤️ for Enterprise Education</strong><br/>
   <sub>Prince of Songkla University — 2026</sub>
